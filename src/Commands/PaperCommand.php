@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Schrojf\Paper\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class PaperCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-papers';
 
     public $description = 'My command';
 
