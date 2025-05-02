@@ -2,6 +2,4 @@
 
 namespace Schrojf\Paper;
 
-class Paper
-{
-}
+class Paper {}

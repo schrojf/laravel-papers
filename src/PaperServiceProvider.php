@@ -2,9 +2,9 @@
 
 namespace Schrojf\Paper;
 
+use Schrojf\Paper\Commands\PaperCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Schrojf\Paper\Commands\PaperCommand;
 
 class PaperServiceProvider extends PackageServiceProvider
 {
