@@ -23,7 +23,7 @@
         "pestphp/pest-plugin-laravel": "^1.0|^2.0|^3.0",
         "phpstan/phpstan": "^1.0",
         "ramsey/uuid": "^4.0",
-        "spatie/laravel-ignition": "^2.0",
+        "spatie/laravel-ignition": "^1.0|^2.0",
         "symfony/mime": "^6.0|^7.0",
         "symfony/var-dumper": "^6.0|^7.0"
     },
