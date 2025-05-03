@@ -1,16 +1,16 @@
 <?php
 
-namespace Schrojf\Paper\Facades;
+namespace Schrojf\Papers\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Schrojf\Paper\Paper
+ * @see \Schrojf\Papers\Paper
  */
 class Paper extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Schrojf\Paper\Paper::class;
+        return \Schrojf\Papers\Paper::class;
     }
 }

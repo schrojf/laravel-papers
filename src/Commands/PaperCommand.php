@@ -1,6 +1,6 @@
 <?php
 
-namespace Schrojf\Paper\Commands;
+namespace Schrojf\Papers\Commands;
 
 use Illuminate\Console\Command;
 

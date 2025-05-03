@@ -1,3 +1,5 @@
-# Changelog
+# Release Notes
 
-All notable changes to `laravel-papers` will be documented in this file.
+## v0.1.0 (202x-xx-xx)
+
+Initial pre-release.

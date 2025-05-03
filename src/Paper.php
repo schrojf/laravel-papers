@@ -1,6 +1,6 @@
 <?php
 
-namespace Schrojf\Paper;
+namespace Schrojf\Papers;
 
 class Paper
 {

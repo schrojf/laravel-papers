@@ -1,84 +1,80 @@
 {
     "name": "schrojf/laravel-papers",
-    "description": "This is my package laravel-papers",
-    "keywords": [
-        "Viliam Schrojf",
-        "laravel",
-        "laravel-papers"
-    ],
-    "homepage": "https://github.com/schrojf/laravel-papers",
+    "description": "Laravel papers package",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Viliam Schrojf",
-            "email": "viliam@schrojf.sk",
-            "role": "Developer"
+            "email": "viliam@schrojf.sk"
         }
     ],
     "require": {
-        "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.14.0",
-        "illuminate/contracts": "^10.0"
+        "php": "^8.2",
+        "laravel/framework": "^9.0|^10.0|^11.0|^12.0"
     },
     "require-dev": {
-        "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^7.8",
-        "larastan/larastan": "^2.0.1",
-        "orchestra/testbench": "^8.8",
-        "pestphp/pest": "^2.20",
-        "pestphp/pest-plugin-arch": "^2.0",
-        "pestphp/pest-plugin-laravel": "^2.0",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0"
+        "laravel/pint": "1.21.0",
+        "mockery/mockery": "^1.0",
+        "orchestra/pest-plugin-testbench": "^2.0|^3.0",
+        "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
+        "orchestra/testbench-core": "^7.0|^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "pestphp/pest-plugin-arch": "^2.0|^3.0",
+        "pestphp/pest-plugin-laravel": "^2.0|^3.0",
+        "phpstan/phpstan": "^1.0",
+        "ramsey/uuid": "^4.0",
+        "spatie/laravel-ignition": "^2.0",
+        "symfony/mime": "^6.0|^7.0",
+        "symfony/var-dumper": "^6.0|^7.0"
     },
     "autoload": {
         "psr-4": {
-            "Schrojf\\Paper\\": "src/",
-            "Schrojf\\Paper\\Database\\Factories\\": "database/factories/"
-        }
+            "Schrojf\\Papers\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Schrojf\\Paper\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Tests\\": "tests/",
+            "App\\": "workbench/app/",
+            "Database\\Factories\\": "workbench/database/factories/",
+            "Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-laravel-papers --ansi",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": [
-            "@composer run prepare",
-            "@php vendor/bin/testbench workbench:build --ansi"
-        ],
-        "start": [
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
             "Composer\\Config::disableProcessTimeout",
-            "@composer run build",
-            "@php vendor/bin/testbench serve"
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
         ],
-        "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true
-        }
+        "test": [
+            "@php vendor/bin/testbench package:purge-skeleton",
+            "@php vendor/bin/pest"
+        ]
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Schrojf\\Paper\\PaperServiceProvider"
-            ],
-            "aliases": {
-                "Paper": "Schrojf\\Paper\\Facades\\Paper"
-            }
+                "Schrojf\\Papers\\PapersServiceProvider"
+            ]
         }
     },
-    "minimum-stability": "dev",
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

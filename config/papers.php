@@ -1,6 +1,7 @@
 <?php
 
-// config for Schrojf/Paper
 return [
+
+    'ok' => true,
 
 ];
