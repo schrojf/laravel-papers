@@ -2,7 +2,8 @@
 module.exports = {
     content: [
         "./resources/views/**/*.blade.php",
-        "./resources/js/**/*.{js,ts,jsx,tsx}"
+        "./resources/js/**/*.{js,ts,jsx,tsx}",
+        "./workbench/resources/views/**/*.blade.php",
     ],
     theme: {
         extend: {},

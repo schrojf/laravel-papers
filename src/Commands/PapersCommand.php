@@ -4,9 +4,9 @@ namespace Schrojf\Papers\Commands;
 
 use Illuminate\Console\Command;
 
-class PaperCommand extends Command
+class PapersCommand extends Command
 {
-    public $signature = 'laravel-papers';
+    public $signature = 'papers';
 
     public $description = 'My command';
 

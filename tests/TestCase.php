@@ -2,31 +2,31 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Schrojf\Papers\PaperServiceProvider;
+use Schrojf\Papers\PapersServiceProvider;
 
 class TestCase extends Orchestra
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     use WithWorkbench;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Factory::guessFactoryNamesUsing(
-        //     fn (string $modelName) => 'Database\Factories\\'.class_basename($modelName).'Factory'
-        // );
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Database\Factories\\'.class_basename($modelName).'Factory'
+        );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            PaperServiceProvider::class,
+            PapersServiceProvider::class,
         ];
     }
 
@@ -37,7 +37,7 @@ class TestCase extends Orchestra
         });
 
         /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-papers_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_papers_table.php';
         $migration->up();
         */
     }

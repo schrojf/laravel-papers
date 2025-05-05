@@ -1,10 +1,11 @@
 laravel: '@testbench'
 
 providers:
-  - Schrojf\Papers\PaperServiceProvider
+  - Schrojf\Papers\PapersServiceProvider
   - App\Providers\WorkbenchServiceProvider
 
 migrations:
+  - database/migrations
   - workbench/database/migrations
 
 seeders:
@@ -27,6 +28,7 @@ workbench:
     - migrate-fresh
   assets:
     - laravel-assets
+    - papers-assets
   sync:
     - from: storage
       to: workbench/storage

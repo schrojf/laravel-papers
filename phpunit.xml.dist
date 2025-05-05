@@ -7,6 +7,11 @@
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
+        <!-- This is not supported by Laravel 9.x, upgrade framework to version 10.x and add "pestphp/pest-plugin-arch": "^2.0||^3.0" to your composer dependency.
+        <testsuite name="Architecture">
+            <file>tests/ArchitectureTest.php</file>
+        </testsuite>
+        -->
     </testsuites>
     <source>
         <include>

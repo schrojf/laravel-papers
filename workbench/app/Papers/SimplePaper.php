@@ -1,10 +1,10 @@
 <?php
 
-namespace Workbench\App\Papers;
+namespace App\Papers;
 
-use Schrojf\Paper\Paper;
+use Schrojf\Papers\Paper;
 
-class SimplePapers extends Paper
+class SimplePaper extends Paper
 {
     public static string $name = 'Simple paper';
     public static string $description = 'Simple paper';

@@ -4,4 +4,5 @@ namespace Schrojf\Papers;
 
 class Paper
 {
+    //
 }
