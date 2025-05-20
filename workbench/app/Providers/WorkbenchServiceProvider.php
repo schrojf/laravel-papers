@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Papers\SimplePaper;
 use Illuminate\Support\ServiceProvider;
+use Schrojf\Papers\Papers;
 
 class WorkbenchServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,8 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Papers::register([
+            SimplePaper::class,
+        ]);
     }
 }

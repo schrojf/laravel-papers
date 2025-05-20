@@ -9,6 +9,60 @@ use RuntimeException;
 class Papers
 {
     /**
+     * The registered paper classes.
+     *
+     * @var array<int, class-string<\Schrojf\Papers\Paper>>
+     */
+    public static array $papers = [];
+
+    /**
+     * Register the given papers.
+     *
+     * @param  array<int, class-string<\Schrojf\Papers\Paper>>  $papers
+     */
+    public static function register(array $papers): static
+    {
+        static::$papers = array_unique(
+            array_merge(static::$papers, $papers)
+        );
+
+        return new static;
+    }
+
+    /**
+     *  Get all the available papers.
+     *
+     * @return array<int, class-string<\Schrojf\Papers\Paper>>
+     */
+    public static function all(): array
+    {
+        return static::$papers;
+    }
+
+    /**
+     * Replace the registered papers with the given papers.
+     *
+     * @param  array<int, class-string<\Schrojf\Papers\Paper>>  $papers
+     */
+    public static function replacePapers(array $papers): static
+    {
+        static::$papers = $papers;
+
+        return new static;
+    }
+
+    public static function paperForHandler(string|null $handler)
+    {
+        foreach (static::$papers as $paper) {
+            if ($paper::handler() === $handler) {
+                return $paper;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Return CSS for the Papers app.
      */
     public function css(): string
