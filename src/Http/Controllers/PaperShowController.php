@@ -6,7 +6,7 @@ use Illuminate\Contracts\View\View;
 use Schrojf\Papers\Http\Requests\PaperRequest;
 use Schrojf\Papers\Papers;
 
-class PaperIndexController
+class PaperShowController
 {
     /**
      * Handle the incoming request.
@@ -14,7 +14,11 @@ class PaperIndexController
     public function __invoke(PaperRequest $request): View
     {
         $papers = Papers::all();
+        $paper = $request->paper();
 
-        return view('papers::pages.index', ['papers' => $papers]);
+        return view('papers::pages.paper', [
+            'papers' => $papers,
+            'paper' => $paper,
+        ]);
     }
 }

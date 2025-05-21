@@ -15,10 +15,14 @@
 
         <ul class="p-4 break-words">
             @foreach($papers as $paper)
+                @php
+                    $isActive = request()->routeIs('papers.show') && request()->route('paper') === $paper::handler();
+                @endphp
+
                 <li class="mb-2">
                     <a
-                        href="#"
-                        class="text-gray-600' hover:text-gray-900 hover:underline"
+                        href="{{ route('papers.show', ['paper' => $paper::handler()]) }}"
+                        class="{{ $isActive ? 'font-medium text-gray-900' : 'text-gray-600' }} hover:text-gray-900 hover:underline"
                     >
                         {{ $paper::name() }}
                     </a>

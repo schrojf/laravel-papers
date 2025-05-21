@@ -5,3 +5,4 @@ use Schrojf\Papers\Http\Controllers\PaperIndexController;
 use Schrojf\Papers\Http\Controllers\PaperShowController;
 
 Route::get('/', PaperIndexController::class)->name('papers.index');
+Route::get('/{paper}', PaperShowController::class)->name('papers.show');

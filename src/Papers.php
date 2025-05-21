@@ -2,6 +2,7 @@
 
 namespace Schrojf\Papers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Js;
 use RuntimeException;
@@ -14,6 +15,13 @@ class Papers
      * @var array<int, class-string<\Schrojf\Papers\Paper>>
      */
     public static array $papers = [];
+
+    /**
+     * The callable that handler the paper was not found.
+     *
+     * @var callable(\Illuminate\Http\Request): void|null
+     */
+    protected static $paperNotFoundCallback = null;
 
     /**
      * Register the given papers.
@@ -60,6 +68,27 @@ class Papers
         }
 
         return null;
+    }
+
+    public static function paperNotFound(Request $request): never
+    {
+        if (static::$paperNotFoundCallback) {
+            call_user_func(static::$paperNotFoundCallback, $request);
+        }
+
+        abort(404, 'Paper not found');
+    }
+
+    /**
+     * Set the callable that resolves the user's preferred locale.
+     *
+     * @param  callable(\Illuminate\Http\Request): void|null  $paperNotFoundCallback
+     */
+    public static function handlePaperNotFound(?callable $paperNotFoundCallback): static
+    {
+        static::$paperNotFoundCallback = $paperNotFoundCallback;
+
+        return new static;
     }
 
     /**

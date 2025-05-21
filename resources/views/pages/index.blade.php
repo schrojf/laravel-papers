@@ -35,7 +35,7 @@
                 <ul class="divide-y divide-gray-200">
                     @foreach($papers as $paper)
                         <li>
-                            <a href="#" class="block px-4 py-3 group hover:bg-gray-100">
+                            <a href="{{ route('papers.show', ['paper' => $paper::handler()]) }}" class="block px-4 py-3 group hover:bg-gray-100">
                                 <div class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-gray-500 mr-2">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
