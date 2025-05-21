@@ -6,7 +6,7 @@ use Schrojf\Papers\Paper;
 
 class SimplePaper extends Paper
 {
-    public static $description = 'Simple paper';
+    public static $description = 'Simple paper description.';
 
     public function definition(): array
     {

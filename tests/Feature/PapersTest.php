@@ -14,12 +14,12 @@ it('has url handler derived from its class name', function () {
 });
 
 it('has description', function () {
-    expect(SimpleTestPaper::$description)->toBeNull();
+    expect(SimpleTestPaper::$description)->toBe('Simple test paper description.');
 
     SimpleTestPaper::$description = 'This is a test paper';
     expect(SimpleTestPaper::description())->toBe('This is a test paper');
 })->after(function (): void {
-    SimpleTestPaper::$description = null;
+    SimpleTestPaper::$description = 'Simple test paper description.';
 });
 
 it('has no papers registered', function () {
