@@ -2,9 +2,6 @@
 
 namespace Schrojf\Papers;
 
-class Paper
-{
-    //
 use Illuminate\Support\Str;
 
 abstract class Paper

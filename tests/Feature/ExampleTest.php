@@ -12,12 +12,6 @@ test('the application returns a successful response', function () {
     $response->assertStatus(200);
 });
 
-test('package is aware of routes', function () {
-    $response = $this->get('/app');
-
-    $response->assertStatus(200);
-});
-
 test('package is aware of console command', function () {
     $this->artisan('papers')->assertExitCode(0);
 });

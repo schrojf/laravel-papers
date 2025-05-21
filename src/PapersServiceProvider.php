@@ -74,7 +74,7 @@ class PapersServiceProvider extends ServiceProvider
 
         Route::group([
             'domain' => config('papers.domain', null),
-            'prefix' => config('papers.path'),
+            'prefix' => config('papers.path', 'papers'),
             'namespace' => 'Schrojf\Papers\Http\Controllers',
             'middleware' => config('papers.middleware', 'web'),
         ], function () {
@@ -83,7 +83,7 @@ class PapersServiceProvider extends ServiceProvider
 
         Route::group([
             'domain' => config('papers.domain', null),
-            'prefix' => Str::finish(config('papers.path', ''), '/').'api',
+            'prefix' => Str::finish(config('papers.path', 'papers'), '/').'api',
             'namespace' => 'Schrojf\Papers\Http\Controllers\Api',
             'middleware' => config('papers.api_middleware', 'api'),
         ], function () {

@@ -9,21 +9,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Laravel Papers{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
+    <title>@yield('title', 'Papers'){{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <!-- Style sheets -->
     {!! Papers::css() !!}
 
-    <!-- JavaScript scripts -->
+    <!-- JavaScript modules -->
     {!! Papers::js() !!}
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 font-sans antialiased">
-    <div class="min-h-screen">
-        <main class="px-3 lg:px-5">
-            <h1 class="text-3xl font-bold underline">
-                Hello world!
-            </h1>
-        </main>
-    </div>
+<body class="font-sans antialiased text-gray-900">
+    @include('papers::partials._header')
+    @includeUnless(empty($papers), 'papers::partials._nav')
+    <main @unless(empty($papers)) class="lg:ml-80" @endunless>
+        @yield('content')
+    </main>
 </body>
 </html>
