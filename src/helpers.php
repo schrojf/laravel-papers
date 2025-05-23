@@ -4,7 +4,7 @@ if (! function_exists('once')) {
     /**
      * @template T
      *
-     * @param (callable(): T) $callback
+     * @param  (callable(): T)  $callback
      * @return T
      */
     function once(callable $callback): mixed
