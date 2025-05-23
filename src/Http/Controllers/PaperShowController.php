@@ -15,10 +15,12 @@ class PaperShowController
     {
         $papers = Papers::all();
         $paper = $request->paper();
+        $content = (new $paper)->resolveContent();
 
         return view('papers::pages.paper', [
             'papers' => $papers,
             'paper' => $paper,
+            'content' => $content,
         ]);
     }
 }

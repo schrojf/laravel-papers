@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Schrojf\Papers\Papers;
+use Tests\fixtures\Papers\EmptyTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 it('has name derived from its class name', function () {
@@ -11,6 +12,11 @@ it('has name derived from its class name', function () {
 
 it('has url handler derived from its class name', function () {
     expect(SimpleTestPaper::handler())->toBe('simple-test-paper');
+});
+
+it('has no default description set', function () {
+    expect(EmptyTestPaper::$description)->toBeNull()
+        ->and(EmptyTestPaper::description())->toBeNull();
 });
 
 it('has description', function () {

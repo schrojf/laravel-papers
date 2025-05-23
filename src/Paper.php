@@ -2,6 +2,7 @@
 
 namespace Schrojf\Papers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 abstract class Paper
@@ -41,5 +42,38 @@ abstract class Paper
     public static function handler()
     {
         return Str::kebab(class_basename(static::class));
+    }
+
+    /**
+     * Get the sections displayed on the paper page.
+     *
+     * @return array
+     */
+    abstract public function sections(): array;
+
+    /**
+     * Resolve content from defined sections.
+     *
+     * @return array
+     */
+    public function resolveContent(): array
+    {
+        $content = [];
+
+        foreach ($this->sections() as $name => $section) {
+            if (is_callable($section)) {
+                $content[] = [
+                    'type' => 'section',
+                    'name' => $name,
+                    'content' => Arr::wrap(call_user_func($section)),
+                ];
+            } else {
+                $content[] = [
+                    'type' => $name,
+                ];
+            }
+        }
+
+        return $content;
     }
 }
