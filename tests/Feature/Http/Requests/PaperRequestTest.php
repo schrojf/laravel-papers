@@ -16,8 +16,8 @@ test('paper class is resolved from request by handler', function () {
 
     expect($request->paper())->toBe(SimpleTestPaper::class);
 })->skip(
-    version_compare(Application::VERSION, '10', '<'),
-    'test requires Laravel 10 or higher due to changes in request handling'
+    version_compare(Application::VERSION, '11', '<'),
+    'test requires Laravel 11 or higher due to changes in request handling'
 );
 
 test('not found exception is thrown when handler not found', function () {
@@ -30,8 +30,8 @@ test('not found exception is thrown when handler not found', function () {
 
     expect(fn () => $request->paper())->toThrow(NotFoundHttpException::class);
 })->skip(
-    version_compare(Application::VERSION, '10', '<'),
-    'test requires Laravel 10 or higher due to changes in request handling'
+    version_compare(Application::VERSION, '11', '<'),
+    'test requires Laravel 11 or higher due to changes in request handling'
 );
 
 test('custom not found handler when paper class could not been resolved', function () {
@@ -44,6 +44,6 @@ test('custom not found handler when paper class could not been resolved', functi
 
     expect(fn () => $request->paper())->toThrow(RuntimeException::class, 'My custom test error.');
 })->skip(
-    version_compare(Application::VERSION, '10', '<'),
-    'test requires Laravel 10 or higher due to changes in request handling'
+    version_compare(Application::VERSION, '11', '<'),
+    'test requires Laravel 11 or higher due to changes in request handling'
 );
