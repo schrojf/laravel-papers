@@ -4,10 +4,6 @@ use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
-afterEach(function () {
-    Papers::replacePapers([]);
-});
-
 test('empty page is shown', function () {
     $response = $this->get('/papers');
 

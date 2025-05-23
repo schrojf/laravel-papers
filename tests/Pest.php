@@ -1,5 +1,6 @@
 <?php
 
+use Schrojf\Papers\Papers;
 use Tests\TestCase;
 
 /*
@@ -16,8 +17,10 @@ use Tests\TestCase;
 uses(TestCase::class)
     // ->beforeEach(function () {
     // })
-    // ->afterEach(function () {
-    // })
+    ->afterEach(function () {
+        Papers::replacePapers([]);
+        Papers::handlePaperNotFound(null);
+    })
     ->in('Unit', 'Feature');
 
 /*

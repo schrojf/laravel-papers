@@ -3,10 +3,6 @@
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
-afterEach(function () {
-    Papers::replacePapers([]);
-});
-
 test('non-existing paper', function () {
     $response = $this->get('/papers/handler');
 
@@ -25,8 +21,6 @@ test('paper class is resolved from request by handler', function () {
         SimpleTestPaper::name(),
         SimpleTestPaper::description(),
     ]);
-})->after(function () {
-    Papers::replacePapers([]);
 });
 
 test('custom not found handler', function () {
@@ -38,6 +32,4 @@ test('custom not found handler', function () {
 
     $response->assertStatus(418);
     $response->assertContent('My custom test content.');
-})->after(function () {
-    Papers::handlePaperNotFound(null);
 });

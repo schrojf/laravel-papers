@@ -43,8 +43,6 @@ test('message is shown when paper has no defined sections', function () {
         'Nothing to show here… yet.',
         'This area is currently empty.',
     ]);
-})->after(function () {
-    Papers::replacePapers([]);
 });
 
 test('content from defined sections is show on paper page', function () {
@@ -67,6 +65,4 @@ test('content from defined sections is show on paper page', function () {
         'Two',
         'Three',
     ]);
-})->after(function () {
-    Papers::replacePapers([]);
 });
