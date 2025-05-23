@@ -24,7 +24,8 @@ it('has description', function () {
 
     SimpleTestPaper::$description = 'This is a test paper';
     expect(SimpleTestPaper::description())->toBe('This is a test paper');
-})->after(function (): void {
+
+    // after
     SimpleTestPaper::$description = 'Simple test paper description.';
 });
 
@@ -46,8 +47,6 @@ it('can swap entire paper collection', function () {
         'Form Validation',
         'Data Processing',
     ]);
-})->after(function (): void {
-    Papers::replacePapers([]);
 });
 
 it('can register a paper', function () {
@@ -56,8 +55,6 @@ it('can register a paper', function () {
     ]);
 
     expect(Papers::all())->toBe([SimpleTestPaper::class]);
-})->after(function (): void {
-    Papers::replacePapers([]);
 });
 
 it('will register same paper only once', function () {
@@ -68,8 +65,6 @@ it('will register same paper only once', function () {
     ]);
 
     expect(Papers::all())->toBe([SimpleTestPaper::class]);
-})->after(function (): void {
-    Papers::replacePapers([]);
 });
 
 it('can resolve a paper by its handler', function () {
@@ -79,6 +74,4 @@ it('can resolve a paper by its handler', function () {
 
     expect(Papers::paperForHandler('simple-test-paper'))->toBe(SimpleTestPaper::class)
         ->and(Papers::paperForHandler('not-registered'))->toBeNull();
-})->after(function (): void {
-    Papers::replacePapers([]);
 });
