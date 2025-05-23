@@ -26,7 +26,7 @@ test('not found exception is thrown when handler not found', function () {
     $response = $this->get('/papers/non-existing-paper');
     $request = PaperRequest::createFrom($response->baseRequest);
 
-    expect(fn() => $request->paper())->toThrow(NotFoundHttpException::class);
+    expect(fn () => $request->paper())->toThrow(NotFoundHttpException::class);
 })->after(function () {
     Papers::replacePapers([]);
 });
@@ -39,7 +39,7 @@ test('custom not found handler when paper class could not been resolved', functi
     $response = $this->get('/papers/non-existing-handler');
     $request = PaperRequest::createFrom($response->baseRequest);
 
-    expect(fn() => $request->paper())->toThrow(RuntimeException::class, 'My custom test error.');
+    expect(fn () => $request->paper())->toThrow(RuntimeException::class, 'My custom test error.');
 })->after(function () {
     Papers::handlePaperNotFound(null);
 });

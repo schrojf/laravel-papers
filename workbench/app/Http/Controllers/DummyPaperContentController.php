@@ -51,7 +51,7 @@ class DummyPaperContentController
             [
                 'type' => 'error',
                 'content' => ['Form validation', 'Data processing', 'Email notification'],
-            ]
+            ],
         ];
 
         return view('papers::pages.paper', [

@@ -4,20 +4,21 @@ namespace Schrojf\Papers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Stringable;
 
 abstract class Paper
 {
     /**
      * The description for the paper.
      *
-     * @var \Stringable|string|null
+     * @var Stringable|string|null
      */
     public static $description = null;
 
     /**
      * Get the displayable name of the paper.
      *
-     * @return \Stringable|string
+     * @return Stringable|string
      */
     public static function name()
     {
@@ -27,7 +28,7 @@ abstract class Paper
     /**
      * Get the description for the paper.
      *
-     * @return \Stringable|string|null
+     * @return Stringable|string|null
      */
     public static function description()
     {
@@ -46,15 +47,11 @@ abstract class Paper
 
     /**
      * Get the sections displayed on the paper page.
-     *
-     * @return array
      */
     abstract public function sections(): array;
 
     /**
      * Resolve content from defined sections.
-     *
-     * @return array
      */
     public function resolveContent(): array
     {

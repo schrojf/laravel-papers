@@ -4,12 +4,13 @@ namespace Schrojf\Papers\Contents;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\View;
+use Throwable;
 
 class ExceptionContent extends Content implements Renderable
 {
-    protected \Throwable $throwable;
+    protected Throwable $throwable;
 
-    public function __construct(\Throwable $throwable)
+    public function __construct(Throwable $throwable)
     {
         $this->throwable = $throwable;
     }

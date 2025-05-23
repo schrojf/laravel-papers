@@ -59,7 +59,7 @@ class Papers
         return new static;
     }
 
-    public static function paperForHandler(string|null $handler)
+    public static function paperForHandler(?string $handler)
     {
         foreach (static::$papers as $paper) {
             if ($paper::handler() === $handler) {

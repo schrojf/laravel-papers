@@ -23,7 +23,7 @@ class SimplePaper extends Paper
             'second' => function () {
                 $rand = rand(1, 100);
 
-                return 'Random number: ' . $rand;
+                return 'Random number: '.$rand;
             },
 
             'third' => function () {

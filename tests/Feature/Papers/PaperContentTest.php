@@ -5,7 +5,7 @@ use Tests\fixtures\Papers\EmptyTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 test('paper has defined sections', function () {
-    $paper = new SimpleTestPaper();
+    $paper = new SimpleTestPaper;
 
     $sections = $paper->sections();
 
@@ -17,14 +17,14 @@ test('paper has defined sections', function () {
 });
 
 test('sections are resolved with content', function () {
-    $paper = new SimpleTestPaper();
+    $paper = new SimpleTestPaper;
 
     $content = $paper->resolveContent();
 
     expect($content)->toBe([
-        [ 'type' => 'section', 'name' => 'First section', 'content' => ['One'] ],
-        [ 'type' => 'section', 'name' => 'Second section', 'content' => [] ],
-        [ 'type' => 'section', 'name' => 'Third section', 'content' => ['Two', 'Three'] ],
+        ['type' => 'section', 'name' => 'First section', 'content' => ['One']],
+        ['type' => 'section', 'name' => 'Second section', 'content' => []],
+        ['type' => 'section', 'name' => 'Third section', 'content' => ['Two', 'Three']],
     ]);
 });
 
