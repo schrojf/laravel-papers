@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Schrojf\Papers\Http\Requests\PaperRequest;
 use Schrojf\Papers\Papers;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -14,7 +15,10 @@ test('paper class is resolved from request by handler', function () {
     $request = PaperRequest::createFrom($response->baseRequest);
 
     expect($request->paper())->toBe(SimpleTestPaper::class);
-});
+})->skip(
+    version_compare(Application::VERSION, '10', '<'),
+    'test requires Laravel 10 or higher due to changes in request handling'
+);
 
 test('not found exception is thrown when handler not found', function () {
     Papers::register([
@@ -25,7 +29,10 @@ test('not found exception is thrown when handler not found', function () {
     $request = PaperRequest::createFrom($response->baseRequest);
 
     expect(fn () => $request->paper())->toThrow(NotFoundHttpException::class);
-});
+})->skip(
+    version_compare(Application::VERSION, '10', '<'),
+    'test requires Laravel 10 or higher due to changes in request handling'
+);
 
 test('custom not found handler when paper class could not been resolved', function () {
     Papers::handlePaperNotFound(function () {
@@ -36,4 +43,7 @@ test('custom not found handler when paper class could not been resolved', functi
     $request = PaperRequest::createFrom($response->baseRequest);
 
     expect(fn () => $request->paper())->toThrow(RuntimeException::class, 'My custom test error.');
-});
+})->skip(
+    version_compare(Application::VERSION, '10', '<'),
+    'test requires Laravel 10 or higher due to changes in request handling'
+);
