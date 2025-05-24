@@ -4,7 +4,9 @@ namespace Schrojf\Papers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Schrojf\Papers\Contents\ExceptionContent;
 use Stringable;
+use Throwable;
 
 abstract class Paper
 {
@@ -56,19 +58,45 @@ abstract class Paper
     public function resolveContent(): array
     {
         $content = [];
+        $hasError = false;
+        $notExecuted = [];
 
         foreach ($this->sections() as $name => $section) {
+            if ($hasError) {
+                $notExecuted[] = $name;
+
+                continue;
+            }
+
             if (is_callable($section)) {
-                $content[] = [
-                    'type' => 'section',
-                    'name' => $name,
-                    'content' => Arr::wrap(call_user_func($section)),
-                ];
+                try {
+                    $content[] = [
+                        'type' => 'section',
+                        'name' => $name,
+                        'content' => Arr::wrap(call_user_func($section)),
+                    ];
+                } catch (Throwable $e) {
+                    $hasError = true;
+                    $content[] = [
+                        'type' => 'section',
+                        'name' => $name,
+                        'content' => [
+                            new ExceptionContent($e),
+                        ],
+                    ];
+                }
             } else {
                 $content[] = [
                     'type' => $name,
                 ];
             }
+        }
+
+        if (! empty($notExecuted)) {
+            $content[] = [
+                'type' => 'error',
+                'content' => $notExecuted,
+            ];
         }
 
         return $content;
