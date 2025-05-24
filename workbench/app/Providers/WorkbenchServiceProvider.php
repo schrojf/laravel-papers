@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Papers\DataPanelContentPaper;
 use App\Papers\EmptyPaper;
+use App\Papers\HeavyStressTableContentTest;
+use App\Papers\PaperWithRuntimeException;
 use App\Papers\SimplePaper;
+use App\Papers\TableContentPaper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +31,10 @@ class WorkbenchServiceProvider extends ServiceProvider
         Papers::register([
             SimplePaper::class,
             EmptyPaper::class,
+            PaperWithRuntimeException::class,
+            DataPanelContentPaper::class,
+            TableContentPaper::class,
+            HeavyStressTableContentTest::class,
         ]);
 
         Papers::handlePaperNotFound(function (Request $request) {
