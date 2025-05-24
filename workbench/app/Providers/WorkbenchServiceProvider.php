@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Papers\EmptyPaper;
 use App\Papers\SimplePaper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Schrojf\Papers\Papers;
 
@@ -35,6 +36,14 @@ class WorkbenchServiceProvider extends ServiceProvider
                 ->view('papers::pages.404', ['papers' => $papers])
                 ->setStatusCode(404)
             );
+        });
+
+        Gate::define('viewPapers', function ($user = null) {
+            if (is_null($user)) {
+                return app()->environment('local');
+            }
+
+            return true;
         });
     }
 }
