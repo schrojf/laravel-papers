@@ -7,7 +7,7 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Support\Js;
 use RuntimeException;
 
-class Papers
+final class Papers
 {
     /**
      * The registered paper classes.
@@ -28,13 +28,13 @@ class Papers
      *
      * @param  array<int, class-string<\Schrojf\Papers\Paper>>  $papers
      */
-    public static function register(array $papers): static
+    public static function register(array $papers): self
     {
-        static::$papers = array_unique(
-            array_merge(static::$papers, $papers)
+        self::$papers = array_unique(
+            array_merge(self::$papers, $papers)
         );
 
-        return new static;
+        return new self;
     }
 
     /**
@@ -44,7 +44,7 @@ class Papers
      */
     public static function all(): array
     {
-        return static::$papers;
+        return self::$papers;
     }
 
     /**
@@ -52,16 +52,16 @@ class Papers
      *
      * @param  array<int, class-string<\Schrojf\Papers\Paper>>  $papers
      */
-    public static function replacePapers(array $papers): static
+    public static function replacePapers(array $papers): self
     {
-        static::$papers = $papers;
+        self::$papers = $papers;
 
-        return new static;
+        return new self;
     }
 
     public static function paperForHandler(?string $handler)
     {
-        foreach (static::$papers as $paper) {
+        foreach (self::$papers as $paper) {
             if ($paper::handler() === $handler) {
                 return $paper;
             }
@@ -72,8 +72,8 @@ class Papers
 
     public static function paperNotFound(Request $request): never
     {
-        if (static::$paperNotFoundCallback) {
-            call_user_func(static::$paperNotFoundCallback, $request);
+        if (self::$paperNotFoundCallback) {
+            call_user_func(self::$paperNotFoundCallback, $request);
         }
 
         abort(404, 'Paper not found');
@@ -84,11 +84,11 @@ class Papers
      *
      * @param  callable(\Illuminate\Http\Request): void|null  $paperNotFoundCallback
      */
-    public static function handlePaperNotFound(?callable $paperNotFoundCallback): static
+    public static function handlePaperNotFound(?callable $paperNotFoundCallback): self
     {
-        static::$paperNotFoundCallback = $paperNotFoundCallback;
+        self::$paperNotFoundCallback = $paperNotFoundCallback;
 
-        return new static;
+        return new self;
     }
 
     /**
@@ -114,7 +114,7 @@ class Papers
             throw new RuntimeException('Unable to load the Papers app JavaScript.');
         }
 
-        $packageName = Js::from(static::scriptVariables());
+        $packageName = Js::from(self::scriptVariables());
 
         return new HtmlString(<<<HTML
             <script type="module">
