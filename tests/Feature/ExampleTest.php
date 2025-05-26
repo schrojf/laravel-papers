@@ -19,7 +19,3 @@ test('package is aware of console command', function () {
 test('package is aware of migration file', function () {
     expect(Schema::hasTable('papers'))->toBeTrue();
 });
-
-test('package is aware of config file', function () {
-    expect(config('papers.ok'))->toBeTrue();
-});

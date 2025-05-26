@@ -111,29 +111,29 @@ class PapersServiceProvider extends ServiceProvider
             __DIR__.'/../config/papers.php' => $this->app->configPath('papers.php'),
         ], ['papers', 'papers-config']);
 
-        //     $this->publishes([
-        //         __DIR__.'/../lang' => $this->app->langPath('vendor/papers'),
-        //     ]);
+        // $this->publishes([
+        //     __DIR__.'/../lang' => $this->app->langPath('vendor/papers'),
+        // ]);
 
-        //     $this->publishes([
-        //         __DIR__.'/../resources/views' => resource_path('views/vendor/papers'),
-        //     ]);
+        $this->publishes([
+            __DIR__.'/../resources/views' => resource_path('views/vendor/papers'),
+        ], ['papers', 'papers-views']);
     }
 
     private function registerMigrations(): void
     {
-        $method = method_exists($this, 'publishesMigrations') ? 'publishesMigrations' : 'publishes';
+        // $method = method_exists($this, 'publishesMigrations') ? 'publishesMigrations' : 'publishes';
 
-        $this->{$method}([
-            __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], ['papers', 'papers-migrations']);
+        // $this->{$method}([
+        //     __DIR__.'/../database/migrations' => database_path('migrations'),
+        // ], ['papers', 'papers-migrations']);
     }
 
     private function registerAssets(): void
     {
-        $this->publishes([
-            __DIR__.'/../dist' => public_path('vendor/papers'),
-        ], [/* 'public', */ 'papers', 'papers-assets']);
+        // $this->publishes([
+        //     __DIR__.'/../dist' => public_path('vendor/papers'),
+        // ], [/* 'public', */ 'papers', 'papers-assets']);
     }
 
     /**

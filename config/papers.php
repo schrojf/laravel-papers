@@ -3,8 +3,6 @@
 // config for Schrojf/Papers
 return [
 
-    'ok' => true,
-
     'middleware' => [
         'web',
         \Schrojf\Papers\Http\Middleware\AuthorizePapers::class,
