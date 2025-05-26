@@ -1,5 +1,5 @@
 @php
-    use \Schrojf\Papers\Facades\Papers;
+    use \Schrojf\Papers\Papers;
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

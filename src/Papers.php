@@ -94,7 +94,7 @@ final class Papers
     /**
      * Return CSS for the Papers app.
      */
-    public function css(): string
+    public static function css(): string
     {
         $css = __DIR__.'/../dist/papers.css';
 
@@ -108,7 +108,7 @@ final class Papers
     /**
      * Return the compiled JavaScript from the vendor directory.
      */
-    public function js(): string
+    public static function js(): string
     {
         if (($js = @file_get_contents(__DIR__.'/../dist/papers.js')) === false) {
             throw new RuntimeException('Unable to load the Papers app JavaScript.');

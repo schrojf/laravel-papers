@@ -91,7 +91,6 @@
                 "Schrojf\\Papers\\PapersServiceProvider"
             ],
             "aliases": {
-                "Papers": "Schrojf\\Papers\\Facades\\Papers"
             }
         }
     },
