@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Js;
 use RuntimeException;
+use Schrojf\Papers\Traits\SponsorSupportable;
 
 final class Papers
 {
+    use SponsorSupportable;
+
     /**
      * The registered paper classes.
      *
