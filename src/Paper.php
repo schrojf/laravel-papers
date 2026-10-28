@@ -25,6 +25,13 @@ abstract class Paper
     public static $fullWidth = false;
 
     /**
+     * The additional words to find the paper by, besides its name and description.
+     *
+     * @var array<int, string>
+     */
+    public static $keywords = [];
+
+    /**
      * Get the displayable name of the paper.
      *
      * @return Stringable|string
@@ -50,6 +57,31 @@ abstract class Paper
     public static function fullWidth(): bool
     {
         return static::$fullWidth;
+    }
+
+    /**
+     * Get the additional words to find the paper by, besides its name and description.
+     *
+     * @return array<int, string>
+     */
+    public static function keywords(): array
+    {
+        return static::$keywords;
+    }
+
+    /**
+     * Get the plain text data the papers filter searches in.
+     *
+     * @return array{name: string, description: string, handler: string, keywords: array<int, string>}
+     */
+    public static function searchData(): array
+    {
+        return [
+            'name' => strip_tags((string) static::name()),
+            'description' => strip_tags((string) static::description()),
+            'handler' => static::handler(),
+            'keywords' => array_map(fn ($keyword) => strip_tags((string) $keyword), static::keywords()),
+        ];
     }
 
     /**

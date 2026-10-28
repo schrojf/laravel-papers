@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
 use Tests\fixtures\Papers\FullWidthTestPaper;
+use Tests\fixtures\Papers\SearchableTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 it('has name derived from its class name', function () {
@@ -37,6 +38,27 @@ it('is not full width by default', function () {
 
 it('can be full width', function () {
     expect(FullWidthTestPaper::fullWidth())->toBeTrue();
+});
+
+it('has no keywords by default', function () {
+    expect(SimpleTestPaper::$keywords)->toBe([])
+        ->and(SimpleTestPaper::keywords())->toBe([]);
+});
+
+it('has plain text search data', function () {
+    expect(SimpleTestPaper::searchData())->toBe([
+        'name' => 'Simple Test Paper',
+        'description' => 'Simple test paper description.',
+        'handler' => 'simple-test-paper',
+        'keywords' => [],
+    ]);
+
+    expect(SearchableTestPaper::searchData())->toBe([
+        'name' => 'Predaj "podľa" značiek & kolekcií',
+        'description' => 'Sales by brand',
+        'handler' => 'searchable-test-paper',
+        'keywords' => ['tržby', 'revenue'],
+    ]);
 });
 
 it('has no papers registered', function () {

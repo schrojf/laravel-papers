@@ -6,6 +6,7 @@ use App\Papers\DataPanelContentPaper;
 use App\Papers\EmptyPaper;
 use App\Papers\FullWidthPaper;
 use App\Papers\HeavyStressTableContentTest;
+use App\Papers\LocalizedNamePaper;
 use App\Papers\PaperWithAction;
 use App\Papers\PaperWithRuntimeException;
 use App\Papers\SimplePaper;
@@ -39,6 +40,7 @@ class WorkbenchServiceProvider extends ServiceProvider
             TableContentPaper::class,
             HeavyStressTableContentTest::class,
             FullWidthPaper::class,
+            LocalizedNamePaper::class,
         ]);
 
         Papers::handlePaperNotFound(function (Request $request) {

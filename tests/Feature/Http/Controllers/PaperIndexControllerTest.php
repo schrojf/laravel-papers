@@ -2,6 +2,7 @@
 
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
+use Tests\fixtures\Papers\SearchableTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 test('empty page is shown', function () {
@@ -47,4 +48,34 @@ test('index page shows all registered papers in order', function () {
             SimpleTestPaper::description(),
             EmptyTestPaper::name(),
         ]);
+});
+
+test('index page and navigation have filters for papers', function () {
+    Papers::register([
+        SimpleTestPaper::class,
+        SearchableTestPaper::class,
+    ]);
+
+    $response = $this->get('/papers');
+
+    $response->assertOk()
+        ->assertSee('aria-controls="papers-nav-list"', false)
+        ->assertSee('aria-controls="papers-index-list"', false);
+
+    // Read the search data the way the browser does, so quotes or markup in it can't break the attribute.
+    $document = new DOMDocument;
+    @$document->loadHTML('<?xml encoding="UTF-8">'.$response->getContent());
+    $xpath = new DOMXPath($document);
+
+    foreach (['papers-nav-list', 'papers-index-list'] as $list) {
+        $searchData = array_map(
+            fn (DOMElement $item) => json_decode($item->getAttribute('data-paper'), true),
+            iterator_to_array($xpath->query("//ul[@id='{$list}']/li"))
+        );
+
+        expect($searchData)->toBe([
+            SimpleTestPaper::searchData(),
+            SearchableTestPaper::searchData(),
+        ]);
+    }
 });

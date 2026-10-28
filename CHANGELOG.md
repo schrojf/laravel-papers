@@ -1,5 +1,14 @@
 # Release Notes
 
+## 0.2.2 - 2026-10-28
+
+### Added
+
+- A filter for finding papers in the navigation and on the index page. It searches the name, description, URL handler and keywords of papers, ignores letter case and diacritics, and ranks matches in the name first. Press `/` to focus it, the arrow keys and `Enter` to open a paper, and `Escape` to clear it. The query is kept while browsing papers in the same browser tab.
+- Papers can define keywords to be found by other words too, such as synonyms or translations of their name: `public static $keywords = ['revenue', 'tržby'];`.
+
+If you published the views, update `pages/index.blade.php` and `partials/_nav.blade.php`, and publish the new `components/filter.blade.php`.
+
 ## 0.2.1 - 2026-10-28
 
 ### Added

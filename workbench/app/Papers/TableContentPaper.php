@@ -8,6 +8,8 @@ use Schrojf\Papers\Paper;
 
 class TableContentPaper extends Paper
 {
+    public static $keywords = ['grid', 'rows', 'tabuľka'];
+
     public function sections(): array
     {
         return [

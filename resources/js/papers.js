@@ -1,4 +1,7 @@
 import './bootstrap';
+import { initFilters } from './filter';
+
+document.addEventListener('DOMContentLoaded', initFilters);
 
 document.addEventListener('DOMContentLoaded', function () {
     const toggleBtn = document.getElementById('menu-toggle');

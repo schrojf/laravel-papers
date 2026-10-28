@@ -27,15 +27,18 @@
                 </div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-2 flex items-center justify-between gap-4">
                 <h2 class="text-sm font-semibold text-gray-700">Pages</h2>
+                <div class="flex-1 sm:flex-none sm:w-64" role="search">
+                    @include('papers::components.filter', ['list' => 'papers-index-list'])
+                </div>
             </div>
 
             <div class="border border-gray-200 rounded-md overflow-hidden">
-                <ul class="divide-y divide-gray-200">
+                <ul id="papers-index-list" class="divide-y divide-gray-200">
                     @foreach($papers as $paper)
-                        <li>
-                            <a href="{{ route('papers.show', ['paper' => $paper::handler()]) }}" class="block px-4 py-3 group hover:bg-gray-100">
+                        <li data-paper="{{ json_encode($paper::searchData()) }}">
+                            <a href="{{ route('papers.show', ['paper' => $paper::handler()]) }}" class="block px-4 py-3 group hover:bg-gray-100 data-[active]:bg-gray-100">
                                 <div class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-gray-500 mr-2">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -44,7 +47,7 @@
                                         <line x1="16" y1="17" x2="8" y2="17"></line>
                                         <polyline points="10 9 9 9 8 9"></polyline>
                                     </svg>
-                                    <span class="text-sm group-hover:text-gray-950 text-gray-900">{{ $paper::name() }}</span>
+                                    <span class="text-sm group-hover:text-gray-950 text-gray-900" data-paper-name>{{ $paper::name() }}</span>
                                 </div>
                                 @if($paper::description())
                                     <div class="pl-6 pt-1 text-xs text-gray-600">{{ $paper::description() }}</div>
@@ -53,6 +56,7 @@
                         </li>
                     @endforeach
                 </ul>
+                <p id="papers-index-list-empty" class="px-4 py-3 text-sm text-gray-500" hidden>No pages match the filter.</p>
             </div>
         </div>
     @endempty

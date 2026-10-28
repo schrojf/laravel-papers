@@ -27,6 +27,7 @@ Originally created as an experimental project, **Laravel Papers** is ideal for i
 - Create dynamic reporting pages using reusable components
 - Render structured data using tables and data panels
 - Handle forms and buttons with CSRF protected actions
+- Find papers quickly with a keyboard friendly filter
 - Secure access using Laravel's Gate authorization
 
 ## Requirements
@@ -88,6 +89,19 @@ public function boot(): void
     Papers::register([
         MyReportPaper::class,
     ]);
+}
+```
+
+### Finding Papers
+
+The navigation and the index page have a filter for finding papers by their name, description or URL handler. Press `/` to focus it, the arrow keys and `Enter` to open a paper, and `Escape` to clear it. The filter ignores letter case and diacritics, so `stitky` finds "Štítky", and it keeps the query while you browse papers in the same browser tab.
+
+Add keywords to find a paper by other words too, such as synonyms or translations of its name:
+
+```php
+class SalesByBrand extends Paper
+{
+    public static $keywords = ['revenue', 'tržby'];
 }
 ```
 

@@ -33,3 +33,15 @@ test('custom not found handler', function () {
     $response->assertStatus(418);
     $response->assertContent('My custom test content.');
 });
+
+test('paper page has filter for papers in navigation', function () {
+    Papers::register([
+        SimpleTestPaper::class,
+    ]);
+
+    $response = $this->get('/papers/simple-test-paper');
+
+    $response->assertOk()
+        ->assertSee('aria-controls="papers-nav-list"', false)
+        ->assertDontSee('aria-controls="papers-index-list"', false);
+});

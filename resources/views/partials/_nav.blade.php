@@ -14,23 +14,28 @@
                 </div>
             </header>
 
+            <div class="px-4 pt-4" role="search">
+                @include('papers::components.filter', ['list' => 'papers-nav-list'])
+            </div>
+
             <main class="flex-1 overflow-y-auto">
-                <ul class="p-4 break-words">
+                <ul id="papers-nav-list" class="p-4 break-words">
                     @foreach($papers as $paper)
                         @php
                             $isActive = request()->routeIs('papers.show', 'papers.action') && request()->route('paper') === $paper::handler();
                         @endphp
 
-                        <li class="mb-2">
+                        <li class="mb-2" data-paper="{{ json_encode($paper::searchData()) }}">
                             <a
                                 href="{{ route('papers.show', ['paper' => $paper::handler()]) }}"
-                                class="{{ $isActive ? 'font-medium text-gray-900' : 'text-gray-600' }} hover:text-gray-900 hover:underline"
+                                class="{{ $isActive ? 'font-medium text-gray-900' : 'text-gray-600' }} hover:text-gray-900 hover:underline data-[active]:text-gray-900 data-[active]:underline"
                             >
-                                {{ $paper::name() }}
+                                <span data-paper-name>{{ $paper::name() }}</span>
                             </a>
                         </li>
                     @endforeach
                 </ul>
+                <p id="papers-nav-list-empty" class="p-4 text-sm text-gray-500" hidden>No pages match the filter.</p>
             </main>
 
             @includeWhen(\Schrojf\Papers\Papers::shouldShowSponsorBadge(), 'papers::partials._support')
