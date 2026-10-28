@@ -2,6 +2,7 @@
 
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
+use Tests\fixtures\Papers\FullWidthTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 test('paper has defined sections', function () {
@@ -65,4 +66,20 @@ test('content from defined sections is show on paper page', function () {
         'Two',
         'Three',
     ]);
+});
+
+test('paper page width is limited unless paper is full width', function () {
+    Papers::register([
+        SimpleTestPaper::class,
+        FullWidthTestPaper::class,
+    ]);
+
+    $this->get('/papers/simple-test-paper')
+        ->assertOk()
+        ->assertSee('class="px-4 py-6 mx-auto max-w-4xl"', false);
+
+    $this->get('/papers/full-width-test-paper')
+        ->assertOk()
+        ->assertSeeText('One')
+        ->assertSee('class="px-4 py-6 mx-auto "', false);
 });

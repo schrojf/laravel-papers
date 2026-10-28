@@ -1,5 +1,14 @@
 # Release Notes
 
+## 0.2.1 - 2026-10-28
+
+### Added
+
+- Papers can use the full width of the screen. Set `public static $fullWidth = true;` on a paper to remove the width limit of its page.
+- Tables can be fitted to the width of their section with `TableContent::fit()`. The table spans the whole section and its columns shrink by wrapping their content instead of scrolling horizontally. Headers wrap between words only, while values may break anywhere, so long URLs or references don't widen the table.
+
+If you published the views, update `pages/paper.blade.php` and `components/table.blade.php`.
+
 ## 0.2.0 - 2026-10-28
 
 ### Added

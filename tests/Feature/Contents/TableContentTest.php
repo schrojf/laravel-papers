@@ -23,3 +23,32 @@ test('data panel content is rendered', function () {
         ->toContain('cell B2')
         ->toContain('cell C1');
 });
+
+test('table content keeps cells on one line and scrolls by default', function () {
+    $content = TableContent::withHeaders(['header A'])
+        ->row(['cell A1'])
+        ->render();
+
+    expect($content)->toContain('min-w-max', 'whitespace-nowrap')
+        ->not->toContain('min-w-full', '[overflow-wrap:anywhere]');
+});
+
+test('table content can be fitted to the section width', function () {
+    $content = TableContent::withHeaders(['header A'])
+        ->row(['cell A1'])
+        ->fit()
+        ->render();
+
+    expect($content)->toContain('min-w-full', '[overflow-wrap:anywhere]')
+        ->not->toContain('min-w-max', 'whitespace-nowrap');
+});
+
+test('table content fit can be turned off', function () {
+    $content = TableContent::withHeaders(['header A'])
+        ->row(['cell A1'])
+        ->fit()
+        ->fit(false);
+
+    expect($content->toArray()['fit'])->toBeFalse()
+        ->and($content->render())->toContain('min-w-max', 'whitespace-nowrap');
+});

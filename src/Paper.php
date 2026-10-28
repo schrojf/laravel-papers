@@ -18,6 +18,13 @@ abstract class Paper
     public static $description = null;
 
     /**
+     * Indicates if the paper page should use the full width of the screen.
+     *
+     * @var bool
+     */
+    public static $fullWidth = false;
+
+    /**
      * Get the displayable name of the paper.
      *
      * @return Stringable|string
@@ -35,6 +42,14 @@ abstract class Paper
     public static function description()
     {
         return static::$description;
+    }
+
+    /**
+     * Determine if the paper page should use the full width of the screen.
+     */
+    public static function fullWidth(): bool
+    {
+        return static::$fullWidth;
     }
 
     /**

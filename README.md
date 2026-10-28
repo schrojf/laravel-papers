@@ -179,6 +179,27 @@ class DemoPaper extends Paper
 }
 ```
 
+### Full Width
+
+Paper pages are limited in width to keep text readable. Papers with wide content, such as tables with many columns, may use the full width of the screen:
+
+```php
+class SalesReport extends Paper
+{
+    public static $fullWidth = true;
+}
+```
+
+### Fitting Tables
+
+Tables keep each cell on a single line and scroll horizontally when they are wider than their section. Call `fit()` to fit a table to the width of its section instead. The table then spans the whole section, and its columns shrink by wrapping their content: headers wrap between words only, while values may break anywhere, so long URLs or references don't widen the table. It scrolls only when its content can't shrink any further, e.g. a wide image, or headers which don't fit a narrow screen.
+
+```php
+TableContent::withHeaders(['ID', 'Product', 'URL'])
+    ->rows($rows)
+    ->fit();
+```
+
 ## Actions
 
 Sections are built for every `GET` request of the paper page, so they must never change any data. A GET request is not protected against CSRF — a link or an image on any other website opened by a signed-in user could make it.

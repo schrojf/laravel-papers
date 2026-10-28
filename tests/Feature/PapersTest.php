@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
+use Tests\fixtures\Papers\FullWidthTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 it('has name derived from its class name', function () {
@@ -27,6 +28,15 @@ it('has description', function () {
 
     // after
     SimpleTestPaper::$description = 'Simple test paper description.';
+});
+
+it('is not full width by default', function () {
+    expect(SimpleTestPaper::$fullWidth)->toBeFalse()
+        ->and(SimpleTestPaper::fullWidth())->toBeFalse();
+});
+
+it('can be full width', function () {
+    expect(FullWidthTestPaper::fullWidth())->toBeTrue();
 });
 
 it('has no papers registered', function () {

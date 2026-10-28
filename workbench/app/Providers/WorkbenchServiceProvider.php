@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Papers\DataPanelContentPaper;
 use App\Papers\EmptyPaper;
+use App\Papers\FullWidthPaper;
 use App\Papers\HeavyStressTableContentTest;
 use App\Papers\PaperWithAction;
 use App\Papers\PaperWithRuntimeException;
@@ -37,6 +38,7 @@ class WorkbenchServiceProvider extends ServiceProvider
             DataPanelContentPaper::class,
             TableContentPaper::class,
             HeavyStressTableContentTest::class,
+            FullWidthPaper::class,
         ]);
 
         Papers::handlePaperNotFound(function (Request $request) {

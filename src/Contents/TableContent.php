@@ -11,6 +11,8 @@ class TableContent extends Content implements Renderable
 
     protected array $rows = [];
 
+    protected bool $fit = false;
+
     public function __construct(array $headers)
     {
         $this->headers = $headers;
@@ -41,11 +43,22 @@ class TableContent extends Content implements Renderable
         return $this;
     }
 
+    /**
+     * Fit the table to the width of its section by wrapping the cell content.
+     */
+    public function fit(bool $fit = true): self
+    {
+        $this->fit = $fit;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [
             'headers' => $this->headers,
             'rows' => $this->rows,
+            'fit' => $this->fit,
         ];
     }
 
