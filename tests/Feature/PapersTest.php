@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Support\HtmlString;
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
 use Tests\fixtures\Papers\FullWidthTestPaper;
@@ -106,4 +107,42 @@ it('can resolve a paper by its handler', function () {
 
     expect(Papers::paperForHandler('simple-test-paper'))->toBe(SimpleTestPaper::class)
         ->and(Papers::paperForHandler('not-registered'))->toBeNull();
+});
+
+it('renders nothing into the head by default', function () {
+    expect(Papers::renderHead()->toHtml())->toBe('');
+});
+
+it('renders the favicon with an escaped URL', function () {
+    Papers::favicon('/favicon.png?v=1&size=32');
+
+    expect(Papers::renderHead()->toHtml())->toBe('<link rel="icon" href="/favicon.png?v=1&amp;size=32">'.PHP_EOL);
+});
+
+it('renders head HTML as it is', function () {
+    Papers::head('<meta name="theme-color" content="#16a34a">');
+
+    expect(Papers::renderHead()->toHtml())->toBe('<meta name="theme-color" content="#16a34a">');
+
+    Papers::head(new HtmlString('<link rel="manifest" href="/papers.webmanifest">'));
+
+    expect(Papers::renderHead()->toHtml())->toBe('<link rel="manifest" href="/papers.webmanifest">');
+});
+
+it('renders head HTML from a closure whenever the head is rendered', function () {
+    $calls = 0;
+
+    Papers::head(function () use (&$calls) {
+        $calls++;
+
+        return new HtmlString('<link rel="apple-touch-icon" href="/apple-touch-icon.png">');
+    });
+
+    expect($calls)->toBe(0);
+
+    Papers::favicon('/favicon.png');
+
+    expect(Papers::renderHead()->toHtml())->toBe('<link rel="icon" href="/favicon.png">'.PHP_EOL.'<link rel="apple-touch-icon" href="/apple-touch-icon.png">')
+        ->and(Papers::renderHead()->toHtml())->toContain('apple-touch-icon')
+        ->and($calls)->toBe(2);
 });

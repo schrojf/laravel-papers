@@ -43,6 +43,10 @@ class WorkbenchServiceProvider extends ServiceProvider
             LocalizedNamePaper::class,
         ]);
 
+        Papers::favicon("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>");
+
+        Papers::head(fn () => view('papers-head'));
+
         Papers::handlePaperNotFound(function (Request $request) {
             $papers = Papers::all();
 

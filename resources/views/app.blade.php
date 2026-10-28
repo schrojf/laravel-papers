@@ -16,6 +16,8 @@
 
     <!-- JavaScript modules -->
     {!! Papers::js() !!}
+
+    {{ Papers::renderHead() }}
 </head>
 <body class="font-sans antialiased text-gray-900">
     @include('papers::partials._header')

@@ -20,6 +20,8 @@ uses(TestCase::class)
     ->afterEach(function () {
         Papers::replacePapers([]);
         Papers::handlePaperNotFound(null);
+        Papers::favicon(null);
+        Papers::head(null);
     })
     ->in('Unit', 'Feature');
 

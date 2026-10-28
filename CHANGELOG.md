@@ -1,5 +1,14 @@
 # Release Notes
 
+## 0.2.3 - 2026-10-28
+
+### Added
+
+- Papers pages can have a favicon of their own, so their browser tabs stand out from the rest of your app: `Papers::favicon(asset('favicon-green.png'));`.
+- Any other HTML can be added to the head of papers pages, such as more icons, a web manifest or a theme color: `Papers::head(fn () => view('papers.head'));`. It is not escaped, and a closure is called whenever a page is rendered.
+
+If you published the views, update `app.blade.php`.
+
 ## 0.2.2 - 2026-10-28
 
 ### Added

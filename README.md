@@ -123,6 +123,32 @@ public function boot(): void
 }
 ```
 
+### Favicon and Head
+
+Papers pages use your app's `/favicon.ico` by default. Set a favicon of their own, so their browser tabs stand out from the rest of your app:
+
+```php
+use Schrojf\Papers\Papers;
+
+public function boot(): void
+{
+    Papers::favicon(asset('favicon-green.png'));
+}
+```
+
+Add any other HTML to the head of papers pages, such as more icons, a web manifest or a theme color. It is not escaped, and a closure is called whenever a page is rendered:
+
+```php
+Papers::head(fn () => view('papers.head'));
+```
+
+```blade
+{{-- resources/views/papers/head.blade.php --}}
+<link rel="icon" href="{{ asset('favicon-green.ico') }}" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="{{ asset('apple-touch-icon-green.png') }}">
+<link rel="manifest" href="{{ asset('papers.webmanifest') }}">
+```
+
 ## Creating a Paper
 
 A Paper class extends `Schrojf\Papers\Paper` and defines its sections as callable functions. Each section returns content such as strings, arrays, or component instances like `TableContent` or `DataPanelContent`.
