@@ -18,7 +18,7 @@
                 <ul class="p-4 break-words">
                     @foreach($papers as $paper)
                         @php
-                            $isActive = request()->routeIs('papers.show') && request()->route('paper') === $paper::handler();
+                            $isActive = request()->routeIs('papers.show', 'papers.action') && request()->route('paper') === $paper::handler();
                         @endphp
 
                         <li class="mb-2">

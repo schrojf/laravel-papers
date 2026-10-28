@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Papers\DataPanelContentPaper;
 use App\Papers\EmptyPaper;
 use App\Papers\HeavyStressTableContentTest;
+use App\Papers\PaperWithAction;
 use App\Papers\PaperWithRuntimeException;
 use App\Papers\SimplePaper;
 use App\Papers\TableContentPaper;
@@ -31,6 +32,7 @@ class WorkbenchServiceProvider extends ServiceProvider
         Papers::register([
             SimplePaper::class,
             EmptyPaper::class,
+            PaperWithAction::class,
             PaperWithRuntimeException::class,
             DataPanelContentPaper::class,
             TableContentPaper::class,

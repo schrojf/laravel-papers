@@ -26,6 +26,7 @@ Originally created as an experimental project, **Laravel Papers** is ideal for i
 
 - Create dynamic reporting pages using reusable components
 - Render structured data using tables and data panels
+- Handle forms and buttons with CSRF protected actions
 - Secure access using Laravel's Gate authorization
 
 ## Requirements
@@ -176,6 +177,102 @@ class DemoPaper extends Paper
         ];
     }
 }
+```
+
+## Actions
+
+Sections are built for every `GET` request of the paper page, so they must never change any data. A GET request is not protected against CSRF — a link or an image on any other website opened by a signed-in user could make it.
+
+To change data, define an optional `action()` method on the paper and submit a form from a section to the paper's URL with the `POST` method. The `POST` request runs in the `web` middleware group, so it requires a CSRF token. Papers without an `action()` method answer it with `405 Method Not Allowed`.
+
+Dependencies of the `action()` method are resolved from the container, so you may type-hint any service or your own form request. What the method returns decides what the browser gets:
+
+- **Nothing** — the paper page is rendered right away by the same paper instance, so sections can show what the action stored on it.
+- **A response** — a redirect, a download, JSON or anything else Laravel can send is returned as it is.
+
+```php
+<?php
+
+namespace App\Papers;
+
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\HtmlString;
+use Schrojf\Papers\Paper;
+
+class ProductPrices extends Paper
+{
+    protected ?int $updated = null;
+
+    public function sections(): array
+    {
+        $sections = [
+            'Form' => fn () => new HtmlString('
+                <form method="POST" action="'.e(route('papers.action', static::handler())).'">
+                    '.csrf_field().'
+                    <input type="number" name="discount" min="1" max="90">
+                    <button type="submit" name="intent" value="discount">Apply discount</button>
+                    <button type="submit" name="intent" value="export">Export prices</button>
+                </form>
+            '),
+        ];
+
+        if (! is_null($this->updated)) {
+            $sections['Result'] = fn () => "Prices of {$this->updated} products were updated.";
+        }
+
+        return $sections;
+    }
+
+    public function action(Request $request): mixed
+    {
+        if ($request->input('intent') === 'export') {
+            return response()->streamDownload(function () {
+                echo Product::query()->pluck('price', 'id')->toJson();
+            }, 'prices.json');
+        }
+
+        $validated = $request->validate([
+            'discount' => ['required', 'integer', 'between:1,90'],
+        ]);
+
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            $product->update([
+                'price' => round($product->price * (100 - $validated['discount']) / 100, 2),
+            ]);
+        }
+
+        $this->updated = $products->count();
+
+        return null;
+    }
+}
+```
+
+Refreshing a page rendered after the action submits the form again, which here would apply the discount twice. Return a redirect to load the paper by a `GET` request instead, and pass its result through the session:
+
+```php
+return redirect()
+    ->route('papers.show', static::handler())
+    ->with('updated', $updated);
+```
+
+When the action fails validation, the browser is redirected back with the errors and the old input in the session, as anywhere else in Laravel.
+
+Scripts in sections can call the action in the background too, e.g. for an action returning JSON. The paper page provides the token in its `csrf-token` meta tag:
+
+```js
+fetch('/papers/product-prices', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+    },
+    body: JSON.stringify({ intent: 'email' }),
+});
 ```
 
 ## Testing
