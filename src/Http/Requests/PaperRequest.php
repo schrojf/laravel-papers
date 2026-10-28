@@ -2,8 +2,11 @@
 
 namespace Schrojf\Papers\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Schrojf\Papers\Paper;
 use Schrojf\Papers\Papers;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PaperRequest extends FormRequest
 {
@@ -18,7 +21,7 @@ class PaperRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -30,9 +33,9 @@ class PaperRequest extends FormRequest
     /**
      * Get the class name of the paper page being requested.
      *
-     * @return class-string<\Schrojf\Papers\Paper>
+     * @return class-string<Paper>
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function paper(): string
     {

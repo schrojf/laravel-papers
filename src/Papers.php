@@ -15,21 +15,21 @@ final class Papers
     /**
      * The registered paper classes.
      *
-     * @var array<int, class-string<\Schrojf\Papers\Paper>>
+     * @var array<int, class-string<Paper>>
      */
     public static array $papers = [];
 
     /**
      * The callable that handler the paper was not found.
      *
-     * @var callable(\Illuminate\Http\Request): void|null
+     * @var callable(Request): void|null
      */
     protected static $paperNotFoundCallback = null;
 
     /**
      * Register the given papers.
      *
-     * @param  array<int, class-string<\Schrojf\Papers\Paper>>  $papers
+     * @param  array<int, class-string<Paper>>  $papers
      */
     public static function register(array $papers): self
     {
@@ -43,7 +43,7 @@ final class Papers
     /**
      *  Get all the available papers.
      *
-     * @return array<int, class-string<\Schrojf\Papers\Paper>>
+     * @return array<int, class-string<Paper>>
      */
     public static function all(): array
     {
@@ -53,7 +53,7 @@ final class Papers
     /**
      * Replace the registered papers with the given papers.
      *
-     * @param  array<int, class-string<\Schrojf\Papers\Paper>>  $papers
+     * @param  array<int, class-string<Paper>>  $papers
      */
     public static function replacePapers(array $papers): self
     {
@@ -85,7 +85,7 @@ final class Papers
     /**
      * Set the callable that resolves the user's preferred locale.
      *
-     * @param  callable(\Illuminate\Http\Request): void|null  $paperNotFoundCallback
+     * @param  callable(Request): void|null  $paperNotFoundCallback
      */
     public static function handlePaperNotFound(?callable $paperNotFoundCallback): self
     {

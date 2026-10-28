@@ -1,16 +1,18 @@
 <?php
 
+use Schrojf\Papers\Http\Middleware\AuthorizePapers;
+
 // config for Schrojf/Papers
 return [
 
     'middleware' => [
         'web',
-        \Schrojf\Papers\Http\Middleware\AuthorizePapers::class,
+        AuthorizePapers::class,
     ],
 
     'api_middleware' => [
         'api',
-        \Schrojf\Papers\Http\Middleware\AuthorizePapers::class,
+        AuthorizePapers::class,
     ],
 
 ];
