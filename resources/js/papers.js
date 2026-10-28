@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const menu = document.getElementById('mobile-menu');
     const backdrop = document.getElementById('menu-backdrop');
 
+    // Without registered papers there is no menu to open.
+    if (! menu) return;
+
     const openMenu = () => {
         menu.classList.remove('hidden');
         backdrop.classList.remove('hidden');
