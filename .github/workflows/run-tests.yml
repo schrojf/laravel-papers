@@ -15,6 +15,9 @@ jobs:
     timeout-minutes: 5
     env:
       COMPOSER_NO_INTERACTION: 1
+      # Every release of Laravel 9, 10 and 11 is affected by a security advisory,
+      # so Composer would refuse to install them for the supported versions matrix.
+      COMPOSER_NO_SECURITY_BLOCKING: 1
 
     strategy:
       fail-fast: false
