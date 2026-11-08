@@ -121,7 +121,7 @@ function highlight(item, ranges) {
         nodes.push(document.createTextNode(item.text.slice(position, start)));
 
         const mark = document.createElement('mark');
-        mark.className = 'bg-yellow-200 text-current rounded-sm';
+        mark.className = 'bg-yellow-200 text-current rounded-xs';
         mark.textContent = item.text.slice(start, end);
         nodes.push(mark);
 

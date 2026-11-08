@@ -12,7 +12,7 @@
 
     @foreach($fields as $field)
         @php
-            $control = 'block w-full rounded-md text-sm text-gray-900 shadow-sm '.($field['error'] ? 'border-red-400 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500');
+            $control = 'block w-full rounded-md text-sm text-gray-900 shadow-xs '.($field['error'] ? 'border-red-400 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500');
         @endphp
 
         @if($field['type'] === 'checkbox')
@@ -22,7 +22,7 @@
                         type="checkbox"
                         name="{{ $field['name'] }}"
                         value="1"
-                        class="rounded {{ $field['error'] ? 'border-red-400' : 'border-gray-300' }} text-blue-600 focus:ring-blue-500"
+                        class="rounded-sm {{ $field['error'] ? 'border-red-400' : 'border-gray-300' }} text-blue-600 focus:ring-blue-500"
                         @checked($field['value'])
                         @if($field['error']) aria-invalid="true" @endif
                         {{ $field['attributes'] }}

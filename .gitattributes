@@ -1,4 +1,4 @@
-* text=auto
+* text=auto eol=lf
 
 *.blade.php diff=html
 *.css diff=css
@@ -11,7 +11,9 @@
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
+/.npmrc export-ignore
 /art export-ignore
+/canvas.yaml export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
 /pint.ci.json export-ignore

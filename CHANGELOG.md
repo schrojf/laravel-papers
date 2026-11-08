@@ -1,5 +1,21 @@
 # Release Notes
 
+## 0.4.0 - 2026-11-08
+
+### Added
+
+- Laravel 13 support.
+- The assets can be published, so they are served as cacheable files instead of being inlined in every page: `php artisan vendor:publish --tag="papers-assets"`. They are also published with the `laravel-assets` tag, so the `post-update-cmd` script of a default Laravel application keeps them up-to-date. Outdated published assets are ignored in favour of the inlined assets.
+- The inlined style and script tags use the application's Content Security Policy nonce set by `Vite::useCspNonce()`.
+
+### Changed
+
+- Laravel 12.69 or later, or Laravel 13.30 or later, is required, the lowest releases without security advisories. Support for Laravel 9, 10 and 11 is dropped.
+- The styles are built with Tailwind CSS v4, which supports Safari 16.4, Chrome 111, Firefox 128 and later.
+- `Papers::css()` and `Papers::js()` return `Htmlable`, so they are printed with `{{ }}`.
+
+If you published the views, update all of them, as their classes changed with Tailwind CSS v4.
+
 ## 0.3.0 - 2026-11-08
 
 ### Added

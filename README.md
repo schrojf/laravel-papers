@@ -33,9 +33,9 @@ Originally created as an experimental project, **Laravel Papers** is ideal for i
 
 ## Requirements
 
-- Laravel Framework 9.x, 10.x, 11.x, or 12.x
-- PHP version 8.2, 8.3 or 8.4
-- Modern web browser
+- Laravel Framework 12.x or 13.x
+- PHP version 8.2, 8.3, 8.4 or 8.5 (Laravel 13 requires PHP 8.3 or later)
+- Modern web browser: Safari 16.4, Chrome 111, Firefox 128 or later
 
 ## Installation
 
@@ -74,6 +74,16 @@ Publish the views (optional):
 ```bash
 php artisan vendor:publish --tag="papers-views"
 ```
+
+Publish the assets (optional), so they are served as cacheable files instead of being inlined in every page:
+
+```bash
+php artisan vendor:publish --tag="papers-assets"
+```
+
+The assets are also published with the `laravel-assets` tag, so the `post-update-cmd` script of a default Laravel application keeps them up-to-date. Outdated published assets are ignored in favour of the inlined assets.
+
+When your application sets a Content Security Policy nonce with `Vite::useCspNonce()`, the inlined style and script tags of papers pages use it too.
 
 ## Usage
 

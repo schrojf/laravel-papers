@@ -13,7 +13,7 @@
                 @foreach($rows as $row)
                     <tr class="even:bg-gray-300/50 hover:bg-gray-100 transition-colors">
                         @foreach($row as $cell)
-                            <td class="px-4 py-2 {{ $fit ? '[overflow-wrap:anywhere]' : 'whitespace-nowrap' }}">{{ $cell }}</td>
+                            <td class="px-4 py-2 {{ $fit ? 'wrap-anywhere' : 'whitespace-nowrap' }}">{{ $cell }}</td>
                         @endforeach
                     </tr>
                 @endforeach

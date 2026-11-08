@@ -1,23 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss" source(none);
+
+@source "../views";
+@source "../js";
+@source "../../workbench/resources/views";
+
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
 
 /*
- * Buttons of forms, actions and links. They are not in a layer, so they are
- * always built, as their style is added to the class names by Blade.
+ * Buttons of forms, actions and links. Their style is added to the class
+ * names by Blade, so they are defined here rather than found in the views.
  */
-.papers-button {
-    @apply inline-flex items-center justify-center rounded-md border px-3 py-1.5 text-sm font-medium shadow-sm whitespace-nowrap transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1;
-}
+@layer components {
+    .papers-button {
+        @apply inline-flex items-center justify-center rounded-md border px-3 py-1.5 text-sm font-medium shadow-xs whitespace-nowrap transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1;
+    }
 
-.papers-button-primary {
-    @apply border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700;
-}
+    .papers-button-primary {
+        @apply border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700;
+    }
 
-.papers-button-secondary {
-    @apply border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900;
-}
+    .papers-button-secondary {
+        @apply border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900;
+    }
 
-.papers-button-danger {
-    @apply border-red-200 bg-white text-red-600 hover:border-red-300 hover:bg-red-50;
+    .papers-button-danger {
+        @apply border-red-200 bg-white text-red-600 hover:border-red-300 hover:bg-red-50;
+    }
 }

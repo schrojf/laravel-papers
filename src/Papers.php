@@ -4,6 +4,7 @@ namespace Schrojf\Papers;
 
 use Closure;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Foundation\Vite;
 use Illuminate\Http\Request;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Js;
@@ -13,6 +14,16 @@ use Schrojf\Papers\Traits\SponsorSupportable;
 final class Papers
 {
     use SponsorSupportable;
+
+    /**
+     * The directory the assets are published to, relative to the public path.
+     */
+    public const BUILD_DIRECTORY = 'vendor/papers';
+
+    /**
+     * The path to the "hot" file written while the Vite development server is running.
+     */
+    public static string $hotFile = __DIR__.'/../vite.hot';
 
     /**
      * The registered paper classes.
@@ -152,45 +163,131 @@ final class Papers
     }
 
     /**
-     * Return CSS for the Papers app.
+     * Get the CSS for the Papers app.
      */
-    public static function css(): string
+    public static function css(): Htmlable
     {
-        $css = __DIR__.'/../dist/papers.css';
+        if (self::shouldInlineAssets()) {
+            $css = self::distContents('resources/css/papers.css');
 
-        if (($contents = @file_get_contents($css)) === false) {
-            throw new RuntimeException("Unable to load Papers app CSS path [{$css}].");
+            $nonce = self::nonceAttribute();
+
+            return new HtmlString(<<<HTML
+                <style{$nonce}>{$css}</style>
+                HTML);
         }
 
-        return "<style>{$contents}</style>".PHP_EOL;
+        return self::vite('resources/css/papers.css');
     }
 
     /**
-     * Return the compiled JavaScript from the vendor directory.
+     * Get the JavaScript for the Papers app.
      */
-    public static function js(): string
+    public static function js(): Htmlable
     {
-        if (($js = @file_get_contents(__DIR__.'/../dist/papers.js')) === false) {
-            throw new RuntimeException('Unable to load the Papers app JavaScript.');
+        // Cast to an object, so empty variables are a JavaScript object rather than an array
+        $variables = Js::from((object) self::scriptVariables());
+
+        $nonce = self::nonceAttribute();
+
+        if (self::shouldInlineAssets()) {
+            $js = self::distContents('resources/js/papers.js');
+
+            return new HtmlString(<<<HTML
+                <script type="module"{$nonce}>
+                    window.Papers = {$variables};
+                    {$js}
+                </script>
+                HTML);
         }
 
-        $packageName = Js::from(self::scriptVariables());
+        $script = self::vite('resources/js/papers.js');
 
         return new HtmlString(<<<HTML
-            <script type="module">
-                window.Papers = {$packageName};
-                {$js}
-            </script>
+            <script{$nonce}>window.Papers = {$variables};</script>
+            {$script}
             HTML);
     }
 
     /**
-     * Get the default JavaScript variables for Package.
+     * Get the default JavaScript variables for the Papers app.
      */
     public static function scriptVariables(): array
     {
         return [
             //
         ];
+    }
+
+    /**
+     * Determine if the published assets are up-to-date with the package's compiled assets.
+     */
+    public static function assetsAreCurrent(): bool
+    {
+        $publishedManifest = public_path(self::BUILD_DIRECTORY.'/manifest.json');
+
+        return is_file($publishedManifest)
+            && file_get_contents($publishedManifest) === self::distFile('manifest.json');
+    }
+
+    /**
+     * Determine if the assets should be inlined, rather than loaded from the Vite development server or the published assets.
+     *
+     * Inlined assets can't load chunks or reference other assets, such as fonts or images.
+     */
+    protected static function shouldInlineAssets(): bool
+    {
+        return ! is_file(self::$hotFile) && ! self::assetsAreCurrent();
+    }
+
+    /**
+     * Get the Vite tags for the given entrypoint.
+     */
+    protected static function vite(string $entrypoint): HtmlString
+    {
+        // Clone the application's Vite instance, so its configuration is kept but not changed
+        $vite = (clone app(Vite::class))->useHotFile(self::$hotFile);
+
+        return $vite($entrypoint, self::BUILD_DIRECTORY);
+    }
+
+    /**
+     * Get the contents of the compiled asset for the given entrypoint.
+     */
+    protected static function distContents(string $entrypoint): string
+    {
+        $manifest = json_decode(self::distFile('manifest.json'), true);
+
+        if (! isset($manifest[$entrypoint]['file'])) {
+            throw new RuntimeException("Unable to locate the Papers asset [{$entrypoint}] in the manifest.");
+        }
+
+        return self::distFile($manifest[$entrypoint]['file']);
+    }
+
+    /**
+     * Get the contents of the given compiled file.
+     */
+    protected static function distFile(string $file): string
+    {
+        $path = __DIR__.'/../dist/'.$file;
+
+        if (($contents = @file_get_contents($path)) === false) {
+            throw new RuntimeException("Unable to load the Papers asset [{$path}].");
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Get the nonce attribute for inline tags, using the application's Vite CSP nonce.
+     */
+    protected static function nonceAttribute(): string
+    {
+        if (($nonce = app(Vite::class)->cspNonce()) === null) {
+            return '';
+        }
+
+        return ' nonce="'.e($nonce).'"';
     }
 }

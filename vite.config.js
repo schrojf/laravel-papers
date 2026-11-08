@@ -1,21 +1,22 @@
-import legacy from "@vitejs/plugin-legacy";
+import laravel from "laravel-vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 /** @type {import('vite').UserConfig} */
 export default {
+    // Relative URLs, so published assets work from any public path
+    base: "./",
+    // Load .env from the workbench application, e.g. APP_URL for the development server's CORS origins
+    envDir: "workbench",
     plugins: [
-        // TODO: Implement this in app.blade.php
-        // legacy({
-        //     targets: ["defaults", "> 0.2% and not dead"],
-        // }),
+        laravel({
+            input: ["resources/js/papers.js", "resources/css/papers.css"],
+            hotFile: "vite.hot",
+            refresh: ["resources/views/**", "routes/**", "workbench/resources/views/**", "workbench/routes/**"],
+        }),
+        tailwindcss(),
     ],
     build: {
+        outDir: "dist",
         assetsDir: "",
-        rollupOptions: {
-            input: ["resources/js/papers.js", "resources/css/papers.css"],
-            output: {
-                assetFileNames: "[name][extname]",
-                entryFileNames: "[name].js",
-            },
-        },
     },
 };

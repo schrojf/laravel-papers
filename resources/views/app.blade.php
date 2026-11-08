@@ -1,6 +1,4 @@
-@php
-    use \Schrojf\Papers\Papers;
-@endphp
+@use('Schrojf\Papers\Papers')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -12,10 +10,10 @@
     <title>@yield('title', 'Papers'){{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <!-- Style sheets -->
-    {!! Papers::css() !!}
+    {{ Papers::css() }}
 
     <!-- JavaScript modules -->
-    {!! Papers::js() !!}
+    {{ Papers::js() }}
 
     {{ Papers::renderHead() }}
 </head>

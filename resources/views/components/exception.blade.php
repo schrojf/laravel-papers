@@ -1,4 +1,4 @@
-<div class="border border-red-600 rounded-md break-words overflow-hidden">
+<div class="border border-red-600 rounded-md wrap-break-word overflow-hidden">
     <div class="px-3 py-2 bg-red-600 text-white font-medium">
         {{ $name }}
     </div>

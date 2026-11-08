@@ -124,18 +124,16 @@ class PapersServiceProvider extends ServiceProvider
 
     private function registerMigrations(): void
     {
-        // $method = method_exists($this, 'publishesMigrations') ? 'publishesMigrations' : 'publishes';
-
-        // $this->{$method}([
+        // $this->publishesMigrations([
         //     __DIR__.'/../database/migrations' => database_path('migrations'),
         // ], ['papers', 'papers-migrations']);
     }
 
     private function registerAssets(): void
     {
-        // $this->publishes([
-        //     __DIR__.'/../dist' => public_path('vendor/papers'),
-        // ], [/* 'public', */ 'papers', 'papers-assets']);
+        $this->publishes([
+            __DIR__.'/../dist' => public_path(Papers::BUILD_DIRECTORY),
+        ], ['laravel-assets', 'papers', 'papers-assets']);
     }
 
     /**

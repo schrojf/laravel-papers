@@ -15,7 +15,7 @@
 @endphp
 
 <div role="{{ $type === 'error' ? 'alert' : 'status' }}" class="mb-3 last:mb-0 p-3 border rounded-md text-sm flex items-start gap-3 {{ $classes }}">
-    <svg class="size-5 flex-shrink-0 {{ $iconClasses }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+    <svg class="size-5 shrink-0 {{ $iconClasses }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
         @if($type === 'success')
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         @elseif($type === 'error')

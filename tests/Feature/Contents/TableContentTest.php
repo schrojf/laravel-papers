@@ -30,7 +30,7 @@ test('table content keeps cells on one line and scrolls by default', function ()
         ->render();
 
     expect($content)->toContain('min-w-max', 'whitespace-nowrap')
-        ->not->toContain('min-w-full', '[overflow-wrap:anywhere]');
+        ->not->toContain('min-w-full', 'wrap-anywhere');
 });
 
 test('table content can be fitted to the section width', function () {
@@ -39,7 +39,7 @@ test('table content can be fitted to the section width', function () {
         ->fit()
         ->render();
 
-    expect($content)->toContain('min-w-full', '[overflow-wrap:anywhere]')
+    expect($content)->toContain('min-w-full', 'wrap-anywhere')
         ->not->toContain('min-w-max', 'whitespace-nowrap');
 });
 

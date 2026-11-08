@@ -15,25 +15,22 @@ jobs:
     timeout-minutes: 5
     env:
       COMPOSER_NO_INTERACTION: 1
-      # Every release of Laravel 9, 10 and 11 is affected by a security advisory,
-      # so Composer would refuse to install them for the supported versions matrix.
-      COMPOSER_NO_SECURITY_BLOCKING: 1
 
     strategy:
       fail-fast: false
       matrix:
-        php: [8.4, 8.3, 8.2]
-        laravel: [^12, ^11, ^10, ^9]
+        php: [8.5, 8.4, 8.3, 8.2]
+        laravel: [^13, ^12]
         dependency-version: [prefer-lowest, prefer-stable]
         exclude:
-          - laravel: ^9
-            php: 8.4
+          - laravel: ^13
+            php: 8.2
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2

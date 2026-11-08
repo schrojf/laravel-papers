@@ -6,7 +6,7 @@
             <header class="px-4 py-3 h-14 border-b border-gray-200 flex items-center justify-between">
                 <h2 class="text-sm font-semibold text-gray-900">Pages</h2>
                 <div class="lg:hidden">
-                    <button id="menu-close" aria-label="Close menu" class="block p-1 rounded hover:bg-gray-100">
+                    <button id="menu-close" aria-label="Close menu" class="block p-1 rounded-sm cursor-pointer hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
@@ -19,7 +19,7 @@
             </div>
 
             <main class="flex-1 overflow-y-auto">
-                <ul id="papers-nav-list" class="p-4 break-words">
+                <ul id="papers-nav-list" class="p-4 wrap-break-word">
                     @foreach($papers as $paper)
                         @php
                             $isActive = request()->routeIs('papers.show', 'papers.action') && request()->route('paper') === $paper::handler();
@@ -28,7 +28,7 @@
                         <li class="mb-2" data-paper="{{ json_encode($paper::searchData()) }}">
                             <a
                                 href="{{ route('papers.show', ['paper' => $paper::handler()]) }}"
-                                class="{{ $isActive ? 'font-medium text-gray-900' : 'text-gray-600' }} hover:text-gray-900 hover:underline data-[active]:text-gray-900 data-[active]:underline"
+                                class="{{ $isActive ? 'font-medium text-gray-900' : 'text-gray-600' }} hover:text-gray-900 hover:underline data-active:text-gray-900 data-active:underline"
                             >
                                 <span data-paper-name>{{ $paper::name() }}</span>
                             </a>

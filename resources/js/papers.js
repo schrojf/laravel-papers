@@ -1,4 +1,3 @@
-import './bootstrap';
 import { initFilters } from './filter';
 
 document.addEventListener('DOMContentLoaded', initFilters);

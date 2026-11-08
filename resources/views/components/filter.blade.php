@@ -12,5 +12,5 @@
         data-papers-filter
         class="peer block w-full rounded-md border-gray-300 py-1.5 pl-8 pr-8 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500"
     >
-    <kbd class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 hidden peer-placeholder-shown:block peer-focus:hidden rounded border border-gray-300 px-1.5 font-sans text-xs text-gray-500">/</kbd>
+    <kbd class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 hidden peer-placeholder-shown:block peer-focus:hidden rounded-sm border border-gray-300 px-1.5 font-sans text-xs text-gray-500">/</kbd>
 </label>

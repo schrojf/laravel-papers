@@ -1,0 +1,17 @@
+{
+  "resources/css/papers.css": {
+    "file": "papers-Cn3kSqoY.css",
+    "name": "papers",
+    "names": [
+      "papers.css"
+    ],
+    "src": "resources/css/papers.css",
+    "isEntry": true
+  },
+  "resources/js/papers.js": {
+    "file": "papers-TFcgYxO8.js",
+    "name": "papers",
+    "src": "resources/js/papers.js",
+    "isEntry": true
+  }
+}
