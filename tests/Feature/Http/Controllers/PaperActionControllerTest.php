@@ -2,6 +2,7 @@
 
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\ActionTestPaper;
+use Tests\fixtures\Papers\MultiActionTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 beforeEach(function () {
@@ -10,6 +11,7 @@ beforeEach(function () {
     Papers::register([
         SimpleTestPaper::class,
         ActionTestPaper::class,
+        MultiActionTestPaper::class,
     ]);
 });
 
@@ -69,4 +71,63 @@ test('action requires CSRF token', function () {
     $response = $this->post('/papers/action-test-paper', ['name' => 'John']);
 
     $response->assertStatus(419);
+});
+
+test('action name is passed to action method after its dependencies', function () {
+    $response = $this->post('/papers/multi-action-test-paper/greet', ['name' => 'John']);
+
+    $response->assertRedirect('/papers/multi-action-test-paper/done');
+    $response->assertSessionHas('greeting', 'Hello, John from Papers!');
+});
+
+test('result page shown after redirect of action is not repeated by refreshing it', function () {
+    $this->followingRedirects()
+        ->post('/papers/multi-action-test-paper/greet', ['name' => 'John'])
+        ->assertOk()
+        ->assertSeeTextInOrder(['Result', 'Hello, John from Papers!']);
+
+    $this->get('/papers/multi-action-test-paper/done')
+        ->assertOk()
+        ->assertSeeText('Nothing was done.')
+        ->assertDontSeeText('Hello, John');
+});
+
+test('paper page is rendered by the same instance when named action returns nothing', function () {
+    $this->post('/papers/multi-action-test-paper/render')
+        ->assertOk()
+        ->assertSeeTextInOrder(['Form', 'Rendered', 'Rendered by the render action.']);
+});
+
+test('paper decides which action names exist', function () {
+    $this->post('/papers/multi-action-test-paper/unknown')->assertNotFound();
+});
+
+test('action requiring a name is not found without one', function () {
+    $this->post('/papers/multi-action-test-paper')->assertNotFound();
+});
+
+test('action method without name parameter has no actions with a name', function () {
+    Papers::handlePaperNotFound(function () {
+        abort(response('My custom test content.', 418));
+    });
+
+    $this->post('/papers/action-test-paper/greet', ['name' => 'John'])->assertStatus(418);
+});
+
+test('paper without action method does not accept POST requests with action name', function () {
+    $this->post('/papers/simple-test-paper/greet')->assertStatus(405);
+});
+
+test('form shows old input and errors after named action fails validation', function () {
+    $response = $this->from('/papers/multi-action-test-paper')
+        ->followingRedirects()
+        ->post('/papers/multi-action-test-paper/greet', ['name' => 'Bartholomew']);
+
+    $response->assertOk();
+    $response->assertSee('action="http://localhost/papers/multi-action-test-paper/greet"', false);
+    $response->assertSee('value="Bartholomew"', false);
+    $response->assertSeeText('The name field must not be greater than 10 characters.');
+    // The checkbox checked by default was not sent, so it is unchecked like the user left it.
+    expect($response->getContent())->not->toMatch('/<input\s+type="checkbox"[^>]*\schecked/');
+    expect($this->get('/papers/multi-action-test-paper')->getContent())->toMatch('/<input\s+type="checkbox"[^>]*\schecked/');
 });

@@ -3,6 +3,15 @@ import { initFilters } from './filter';
 
 document.addEventListener('DOMContentLoaded', initFilters);
 
+// Forms and buttons of actions may ask the user to confirm them before they are submitted.
+document.addEventListener('submit', (event) => {
+    const message = event.target.dataset?.papersConfirm;
+
+    if (message && ! window.confirm(message)) {
+        event.preventDefault();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const toggleBtn = document.getElementById('menu-toggle');
     const closeBtn = document.getElementById('menu-close');

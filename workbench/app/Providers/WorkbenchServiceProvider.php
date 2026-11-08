@@ -7,6 +7,7 @@ use App\Papers\EmptyPaper;
 use App\Papers\FullWidthPaper;
 use App\Papers\HeavyStressTableContentTest;
 use App\Papers\LocalizedNamePaper;
+use App\Papers\MultiActionPaper;
 use App\Papers\PaperWithAction;
 use App\Papers\PaperWithRuntimeException;
 use App\Papers\SimplePaper;
@@ -35,6 +36,7 @@ class WorkbenchServiceProvider extends ServiceProvider
             SimplePaper::class,
             EmptyPaper::class,
             PaperWithAction::class,
+            MultiActionPaper::class,
             PaperWithRuntimeException::class,
             DataPanelContentPaper::class,
             TableContentPaper::class,

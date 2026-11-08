@@ -1,5 +1,25 @@
 # Release Notes
 
+## 0.3.0 - 2026-11-08
+
+### Added
+
+- Papers can have named pages, such as `/papers/orders/done`. Add an optional parameter to `sections()`, which gets the page name from the URL: `sections(?string $page = null)`. Papers without it have no named pages, so their URLs with a page name are not found.
+- Papers can have named actions, such as `POST /papers/orders/refund`. The action name is passed to the first parameter of `action()` which isn't a dependency, whatever its name: `action(Request $request, string $action)`. Papers without such a parameter have no named actions.
+- Papers make the URLs of their pages and actions: `static::url('history')`, `static::actionUrl('refund')` and `static::redirect('done')`. They take query parameters too: `static::url(query: ['status' => 'open'])`.
+- `FormContent` makes forms with a CSRF token, whose fields show the old input and the errors of a failed validation.
+- `ButtonContent` makes a button submitting an action on its own, e.g. in a table row, with hidden values.
+- `LinkContent` makes links, which may look like buttons.
+- `AlertContent` highlights success, error, warning or info messages, such as the result of an action.
+- Forms and buttons can ask the user to confirm them before they are submitted.
+
+### Changed
+
+- The routes `papers.show` and `papers.action` have an optional `page` and `action` parameter. The papers API routes are now registered before them, so a paper URL with a name never takes the place of an API route.
+- Papers defining static `url()`, `actionUrl()` or `redirect()` methods of their own have to rename them.
+
+If you published the views, publish the new `components/form.blade.php`, `components/button.blade.php`, `components/link.blade.php` and `components/alert.blade.php`.
+
 ## 0.2.3 - 2026-10-28
 
 ### Added

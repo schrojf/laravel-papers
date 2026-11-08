@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\HtmlString;
 use Schrojf\Papers\Papers;
 use Tests\fixtures\Papers\EmptyTestPaper;
@@ -15,6 +16,32 @@ it('has name derived from its class name', function () {
 
 it('has url handler derived from its class name', function () {
     expect(SimpleTestPaper::handler())->toBe('simple-test-paper');
+});
+
+it('has URLs of its pages', function () {
+    expect(SimpleTestPaper::url())->toBe('http://localhost/papers/simple-test-paper')
+        ->and(SimpleTestPaper::url('done'))->toBe('http://localhost/papers/simple-test-paper/done')
+        ->and(SimpleTestPaper::url('done', ['status' => 'open', 'sort' => 'name']))->toBe('http://localhost/papers/simple-test-paper/done?status=open&sort=name');
+});
+
+it('keeps query parameters named like route parameters in the query string', function () {
+    expect(SimpleTestPaper::url(query: ['page' => 2]))->toBe('http://localhost/papers/simple-test-paper?page=2')
+        ->and(SimpleTestPaper::actionUrl(query: ['action' => 'x']))->toBe('http://localhost/papers/simple-test-paper?action=x');
+});
+
+it('has URLs of its actions', function () {
+    expect(SimpleTestPaper::actionUrl())->toBe('http://localhost/papers/simple-test-paper')
+        ->and(SimpleTestPaper::actionUrl('create'))->toBe('http://localhost/papers/simple-test-paper/create')
+        ->and(SimpleTestPaper::actionUrl('create', ['draft' => 1]))->toBe('http://localhost/papers/simple-test-paper/create?draft=1');
+});
+
+it('redirects to its pages', function () {
+    expect(SimpleTestPaper::redirect())
+        ->toBeInstanceOf(RedirectResponse::class)
+        ->getTargetUrl()->toBe('http://localhost/papers/simple-test-paper');
+
+    expect(SimpleTestPaper::redirect('done', ['id' => 5])->getTargetUrl())
+        ->toBe('http://localhost/papers/simple-test-paper/done?id=5');
 });
 
 it('has no default description set', function () {

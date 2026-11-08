@@ -72,15 +72,8 @@ class PapersServiceProvider extends ServiceProvider
             return;
         }
 
-        Route::group([
-            'domain' => config('papers.domain', null),
-            'prefix' => config('papers.path', 'papers'),
-            'namespace' => 'Schrojf\Papers\Http\Controllers',
-            'middleware' => config('papers.middleware', 'web'),
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        });
-
+        // The API routes are registered first, as the paper page routes with
+        // a page or an action name would match their URLs, e.g. /papers/api/x.
         Route::group([
             'domain' => config('papers.domain', null),
             'prefix' => Str::finish(config('papers.path', 'papers'), '/').'api',
@@ -88,6 +81,15 @@ class PapersServiceProvider extends ServiceProvider
             'middleware' => config('papers.api_middleware', 'api'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
+
+        Route::group([
+            'domain' => config('papers.domain', null),
+            'prefix' => config('papers.path', 'papers'),
+            'namespace' => 'Schrojf\Papers\Http\Controllers',
+            'middleware' => config('papers.middleware', 'web'),
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
     }
 

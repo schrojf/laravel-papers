@@ -27,6 +27,7 @@ Originally created as an experimental project, **Laravel Papers** is ideal for i
 - Create dynamic reporting pages using reusable components
 - Render structured data using tables and data panels
 - Handle forms and buttons with CSRF protected actions
+- Build forms, buttons and links to paper pages and actions without writing their URLs
 - Find papers quickly with a keyboard friendly filter
 - Secure access using Laravel's Gate authorization
 
@@ -240,11 +241,31 @@ TableContent::withHeaders(['ID', 'Product', 'URL'])
     ->fit();
 ```
 
+### Named Pages
+
+A paper may have more pages than its main one, such as `/papers/orders/done` or `/papers/orders/history`. Add an optional parameter to `sections()`, which gets the page name from the URL, and return the sections of that page:
+
+```php
+class Orders extends Paper
+{
+    public function sections(?string $page = null): array
+    {
+        return match ($page) {
+            null => ['Orders' => fn () => $this->ordersTable()],
+            'history' => ['History' => fn () => $this->historyTable()],
+            default => abort(404),
+        };
+    }
+}
+```
+
+Papers whose `sections()` has no parameter have no named pages, so their URLs with a page name are not found.
+
 ## Actions
 
 Sections are built for every `GET` request of the paper page, so they must never change any data. A GET request is not protected against CSRF — a link or an image on any other website opened by a signed-in user could make it.
 
-To change data, define an optional `action()` method on the paper and submit a form from a section to the paper's URL with the `POST` method. The `POST` request runs in the `web` middleware group, so it requires a CSRF token. Papers without an `action()` method answer it with `405 Method Not Allowed`.
+To change data, define an optional `action()` method on the paper and submit a form from a section to the paper's action URL with the `POST` method. The `POST` request runs in the `web` middleware group, so it requires a CSRF token. Papers without an `action()` method answer it with `405 Method Not Allowed`.
 
 Dependencies of the `action()` method are resolved from the container, so you may type-hint any service or your own form request. What the method returns decides what the browser gets:
 
@@ -258,7 +279,7 @@ namespace App\Papers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\HtmlString;
+use Schrojf\Papers\Contents\FormContent;
 use Schrojf\Papers\Paper;
 
 class ProductPrices extends Paper
@@ -268,14 +289,10 @@ class ProductPrices extends Paper
     public function sections(): array
     {
         $sections = [
-            'Form' => fn () => new HtmlString('
-                <form method="POST" action="'.e(route('papers.action', static::handler())).'">
-                    '.csrf_field().'
-                    <input type="number" name="discount" min="1" max="90">
-                    <button type="submit" name="intent" value="discount">Apply discount</button>
-                    <button type="submit" name="intent" value="export">Export prices</button>
-                </form>
-            '),
+            'Form' => fn () => FormContent::make(static::actionUrl())
+                ->number('discount', 'Discount (%)', attributes: ['min' => 1, 'max' => 90])
+                ->submit('Apply discount', 'intent', 'discount')
+                ->submit('Export prices', 'intent', 'export', 'secondary'),
         ];
 
         if (! is_null($this->updated)) {
@@ -312,28 +329,136 @@ class ProductPrices extends Paper
 }
 ```
 
-Refreshing a page rendered after the action submits the form again, which here would apply the discount twice. Return a redirect to load the paper by a `GET` request instead, and pass its result through the session:
+When the action fails validation, the browser is redirected back with the errors and the old input in the session, as anywhere else in Laravel. Forms made by `FormContent` show them by their fields.
+
+### Named Actions
+
+A paper may have several actions, each with a URL of its own, such as `/papers/orders/cancel` or `/papers/orders/refund`. The action name from the URL is passed to the `action()` method. Like route parameters of controllers, it goes to the first parameter which isn't a dependency, whatever its name:
 
 ```php
-return redirect()
-    ->route('papers.show', static::handler())
-    ->with('updated', $updated);
+public function action(Request $request, string $action): mixed
+{
+    return match ($action) {
+        'cancel' => $this->cancel($request),
+        'refund' => $this->refund($request),
+        default => abort(404),
+    };
+}
 ```
 
-When the action fails validation, the browser is redirected back with the errors and the old input in the session, as anywhere else in Laravel.
+Make the parameter optional, e.g. `?string $action = null`, to handle the paper's action URL without a name too. Papers whose `action()` has no such parameter have no named actions, so their URLs with an action name are not found.
+
+### Result Page
+
+Refreshing a page rendered right after the action submits the form again, which would e.g. apply the discount twice. Return a redirect to load a page by a `GET` request instead, and pass the result of the action through the session. Refreshing the page then only loads it again:
+
+```php
+public function action(Request $request, string $action): mixed
+{
+    // ...
+
+    return static::redirect('done')->with('result', "The order #{$order->id} was refunded.");
+}
+
+public function sections(?string $page = null): array
+{
+    if ($page === 'done') {
+        return [
+            'Result' => fn () => session()->has('result')
+                ? AlertContent::success(session('result'))
+                : AlertContent::info('The result of an action is shown only once.'),
+            'Next' => fn () => LinkContent::make('Back to orders', static::url())->button('primary'),
+        ];
+    }
+
+    // ...
+}
+```
+
+### Calling Actions from Scripts
 
 Scripts in sections can call the action in the background too, e.g. for an action returning JSON. The paper page provides the token in its `csrf-token` meta tag:
 
 ```js
-fetch('/papers/product-prices', {
+fetch('/papers/product-prices/email', {
     method: 'POST',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
     },
-    body: JSON.stringify({ intent: 'email' }),
+    body: JSON.stringify({ to: 'sales@example.com' }),
 });
+```
+
+## Forms, Buttons and Links
+
+### URLs
+
+Papers make the URLs of their pages and actions, so you never write them by hand. They are static methods, so a paper may link to other papers too, e.g. `Orders::url('history')`:
+
+| Method                                         | URL                                  |
+|------------------------------------------------|--------------------------------------|
+| `static::url()`                                | `/papers/orders`                     |
+| `static::url('history')`                       | `/papers/orders/history`             |
+| `static::url(query: ['status' => 'open'])`     | `/papers/orders?status=open`         |
+| `static::actionUrl()`                          | `/papers/orders` (POST)              |
+| `static::actionUrl('refund')`                  | `/papers/orders/refund` (POST)       |
+| `static::redirect('done')`                     | a redirect to `/papers/orders/done`  |
+
+### Forms
+
+`FormContent` makes a form with a CSRF token. After a failed validation, its fields show the old input and the errors of the request:
+
+```php
+FormContent::make(static::actionUrl('create'))
+    ->text('title', 'Title', attributes: ['placeholder' => 'Water the plants', 'required' => true])
+    ->number('estimate', 'Estimate (hours)', 1, ['min' => 1])
+    ->input('due', 'Due date', 'date')
+    ->textarea('notes', 'Notes')
+    ->select('priority', 'Priority', ['low' => 'Low', 'high' => 'High'], 'low')
+    ->checkbox('urgent', 'Urgent')
+    ->hidden('project', $project->id)
+    ->submit('Add task')
+    ->submit('Add and open', 'then', 'open', 'secondary');
+```
+
+The value of a field is its default, used until the form is submitted. Extra attributes are added to the field as they are: `true` adds a boolean attribute, `false` or `null` leaves it out. Buttons are `primary`, `secondary` or `danger`, and a name and a value tell the action which button submitted the form. Call `confirm('Are you sure?')` to ask the user before the form is submitted.
+
+### Buttons
+
+`ButtonContent` is a button submitting an action on its own, such as in a table row. It has a CSRF token, and may send hidden values or ask to confirm the action first:
+
+```php
+TableContent::withHeaders(['Order', 'Total', ''])
+    ->rows($orders->map(fn (Order $order) => [
+        $order->number,
+        $order->total,
+        ButtonContent::make('Cancel', static::actionUrl('cancel'))
+            ->hidden('order', $order->id)
+            ->danger()
+            ->confirm("Cancel the order {$order->number}?"),
+    ])->all());
+```
+
+### Links
+
+Sections show links styled as links, or as buttons, e.g. for the next step after an action:
+
+```php
+LinkContent::make('History', static::url('history'));
+
+LinkContent::make('Back to orders', static::url())->button('primary');
+```
+
+### Alerts
+
+`AlertContent` highlights a message, such as the result of an action. Alerts are `success`, `error`, `warning` or `info`, and may have a title:
+
+```php
+AlertContent::success('The order was refunded.')->title('Done');
+
+AlertContent::error('The order was paid by a voucher, so it can\'t be refunded.');
 ```
 
 ## Testing

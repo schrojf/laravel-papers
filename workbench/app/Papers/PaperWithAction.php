@@ -3,7 +3,8 @@
 namespace App\Papers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\HtmlString;
+use Schrojf\Papers\Contents\AlertContent;
+use Schrojf\Papers\Contents\FormContent;
 use Schrojf\Papers\Paper;
 
 class PaperWithAction extends Paper
@@ -18,14 +19,19 @@ class PaperWithAction extends Paper
     public function sections(): array
     {
         $sections = [
-            'Form' => fn () => $this->renderForm(),
+            'Form' => fn () => FormContent::make(static::actionUrl())
+                // Keeps the name on the page rendered right after the action, which has no old input.
+                ->text('name', 'Name', request()->input('name'))
+                ->submit('Greet on this page', 'intent', 'render')
+                ->submit('Greet after redirect', 'intent', 'redirect', 'secondary')
+                ->submit('Download greeting', 'intent', 'download', 'secondary'),
         ];
 
         // Set by the action, or flashed to the session by the action's redirect.
         $greeting = $this->greeting ?? session('greeting');
 
         if ($greeting) {
-            $sections['Result'] = fn () => $greeting;
+            $sections['Result'] = fn () => AlertContent::success($greeting);
         }
 
         return $sections;
@@ -49,36 +55,12 @@ class PaperWithAction extends Paper
 
         // The paper is loaded again by a GET request, so refreshing it does not repeat the action.
         if ($validated['intent'] === 'redirect') {
-            return redirect()->route('papers.show', static::handler())->with('greeting', $greeting);
+            return static::redirect()->with('greeting', $greeting);
         }
 
         // Nothing is returned, so this instance renders the paper and its sections can use the result.
         $this->greeting = $greeting;
 
         return null;
-    }
-
-    protected function renderForm(): HtmlString
-    {
-        $error = session('errors')?->first('name');
-        $name = old('name', request()->input('name'));
-
-        $button = 'padding: 0.5em 1em; border: 1px solid #bfdbfe; border-radius: 0.25em; background: #eff6ff; color: #2563eb; cursor: pointer;';
-
-        return new HtmlString('
-            <form method="POST" action="'.e(route('papers.action', static::handler())).'" style="display: flex; flex-direction: column; gap: 0.75em; max-width: 32em;">
-                '.csrf_field().'
-                <label>
-                    <span style="display: block; font-weight: 500;">Name</span>
-                    <input type="text" name="name" value="'.e($name).'" style="width: 100%;">
-                </label>
-                '.($error ? '<p style="color: #b91c1c;">'.e($error).'</p>' : '').'
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5em;">
-                    <button type="submit" name="intent" value="render" style="'.$button.'">Greet on this page</button>
-                    <button type="submit" name="intent" value="redirect" style="'.$button.'">Greet after redirect</button>
-                    <button type="submit" name="intent" value="download" style="'.$button.'">Download greeting</button>
-                </div>
-            </form>
-        ');
     }
 }

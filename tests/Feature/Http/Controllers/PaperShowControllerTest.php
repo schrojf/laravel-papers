@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Schrojf\Papers\Papers;
+use Tests\fixtures\Papers\PagesTestPaper;
 use Tests\fixtures\Papers\SimpleTestPaper;
 
 test('non-existing paper', function () {
@@ -62,4 +63,41 @@ test('paper page has favicon and head HTML in its head', function () {
     expect(Str::between($response->getContent(), '<head>', '</head>'))
         ->toContain('<link rel="icon" href="/favicon-green.png">')
         ->toContain('<link rel="manifest" href="/papers.webmanifest">');
+});
+
+test('paper page with a name is rendered by sections for the page', function () {
+    Papers::register([
+        PagesTestPaper::class,
+    ]);
+
+    $this->get('/papers/pages-test-paper')
+        ->assertOk()
+        ->assertSeeText('The main page.')
+        ->assertDontSeeText('The details page.');
+
+    $this->get('/papers/pages-test-paper/details')
+        ->assertOk()
+        ->assertSeeTextInOrder([PagesTestPaper::name(), 'Details', 'The details page.'])
+        ->assertDontSeeText('The main page.')
+        ->assertSee('class="font-medium text-gray-900', false);
+});
+
+test('paper decides which page names exist', function () {
+    Papers::register([
+        PagesTestPaper::class,
+    ]);
+
+    $this->get('/papers/pages-test-paper/unknown')->assertNotFound();
+});
+
+test('paper without named pages has no page with a name', function () {
+    Papers::register([
+        SimpleTestPaper::class,
+    ]);
+
+    Papers::handlePaperNotFound(function () {
+        abort(response('My custom test content.', 418));
+    });
+
+    $this->get('/papers/simple-test-paper/details')->assertStatus(418);
 });
